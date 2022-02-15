@@ -1,0 +1,5 @@
+############################################
+#        General Controller Config         #
+############################################
+remoteController_ipAddress = 127.0.0.1
+remoteController_port = 4444

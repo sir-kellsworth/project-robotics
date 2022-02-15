@@ -1,0 +1,29 @@
+#ifndef ACTIONMESSAGE_${CLASS_NAME}_H
+#define ACTIONMESSAGE_${CLASS_NAME}_H
+
+#include "ActionMessage/Action.h"
+
+namespace ActionMessage
+{
+
+class ${CLASS_NAME} : public ActionMessage::Action
+{
+public:
+  ${CLASS_NAME}(${PARAM_LIST});
+
+  virtual ~${CLASS_NAME}();
+  ${GETTERS}
+  ${SETTERS}
+
+  virtual uint8_t messageTypeGet();
+
+  static const uint8_t TYPE_ID;
+  static const uint8_t PACKET_SIZE;
+${SIZE_PARAMS}
+private:
+${MEMBER_VARIABLES}
+};
+
+}
+
+#endif

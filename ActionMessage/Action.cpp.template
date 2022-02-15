@@ -1,0 +1,30 @@
+#include "ActionMessage/${CLASS_NAME}.h"
+
+
+const uint8_t ActionMessage::${CLASS_NAME}::TYPE_ID = ${TYPE_ID};
+const uint8_t ActionMessage::${CLASS_NAME}::PACKET_SIZE = ${PACKET_SIZE};
+${SIZE_PARAMS}
+
+//*****************************************************************************
+ActionMessage::${CLASS_NAME}::${CLASS_NAME}(${PARAM_LIST})
+${MEMBER_VARIABLES}
+{
+
+}
+
+
+//*****************************************************************************
+ActionMessage::${CLASS_NAME}::~${CLASS_NAME}()
+{
+
+}
+
+
+//*****************************************************************************
+uint8_t ActionMessage::${CLASS_NAME}::messageTypeGet()
+{
+  return TYPE_ID;
+}
+
+${GETTERS}
+${SETTERS}

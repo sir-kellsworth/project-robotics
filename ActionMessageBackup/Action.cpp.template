@@ -1,0 +1,18 @@
+#include "ActionMessage/${CLASS_NAME}.h"
+
+
+//*****************************************************************************
+ActionMessage::${CLASS_NAME}::${CLASS_NAME}(${PARAM_LIST})
+{
+
+}
+
+
+//*****************************************************************************
+ActionMessage::${CLASS_NAME}::~${CLASS_NAME}()
+{
+
+}
+
+${GETTERS}
+${SETTERS}

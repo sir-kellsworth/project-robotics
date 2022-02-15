@@ -1,0 +1,23 @@
+#ifndef ACTIONMESSAGE_${CLASS_NAME}_H
+#define ACTIONMESSAGE_${CLASS_NAME}_H
+
+#include "ActionMessage/Action.h"
+
+namespace ActionMessage
+{
+
+class ${CLASS_NAME} : public ActionMessage::Action
+{
+public:
+  ${CLASS_NAME}(${PARAM_LIST});
+
+  virtual ~${CLASS_NAME}();
+  ${GETTERS}
+  ${SETTERS}
+private:
+  ${MEMBER_VARIABLES}
+};
+
+}
+
+#endif

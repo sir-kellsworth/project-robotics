@@ -1,0 +1,27 @@
+#ifndef ACTIONMESSAGE_${CLASS_NAME}_H
+#define ACTIONMESSAGE_${CLASS_NAME}_H
+
+#include "ActionMessage/${DEFINITION_NAME}.h"
+#include "Utils/unique_ptr.h"
+#include "Utils/vector.h"
+
+namespace ActionMessage
+{
+
+class ${CLASS_NAME}
+{
+public:
+  ${CLASS_NAME}(
+    const vector<uint8_t>& data);
+
+  virtual ~${CLASS_NAME}();
+
+  unique_ptr<${DEFINITION_NAME}> definitionGet();
+
+private:
+  vector<uint8_t> m_data;
+};
+
+}
+
+#endif

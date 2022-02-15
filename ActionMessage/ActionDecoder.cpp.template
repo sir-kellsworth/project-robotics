@@ -1,0 +1,32 @@
+#include "ActionMessage/${CLASS_NAME}.h"
+
+
+namespace
+{
+${INDEX_PARAMS}
+}
+
+//*****************************************************************************
+ActionMessage::${CLASS_NAME}::${CLASS_NAME}
+(
+  const vector<uint8_t>& data
+)
+:m_data(data)
+{
+
+}
+
+
+//*****************************************************************************
+ActionMessage::${CLASS_NAME}::~${CLASS_NAME}()
+{
+
+}
+
+
+//*****************************************************************************
+unique_ptr<${DEFINITION_NAME}> ActionMessage::${CLASS_NAME}::definitionGet()
+{
+  return unique_ptr<${DEFINITION_NAME}>(new ${DEFINITION_NAME}(
+${PARAM_LIST}));
+}

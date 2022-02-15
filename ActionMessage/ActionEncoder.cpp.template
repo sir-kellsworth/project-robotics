@@ -1,0 +1,42 @@
+#include "ActionMessage/${CLASS_NAME}.h"
+
+#ifdef __linux__
+#include <cstring>
+#endif
+
+
+namespace
+{
+  const uint8_t TYPE_ID_POSITION(0);
+${INDEX_PARAMS}
+}
+
+//*****************************************************************************
+ActionMessage::${CLASS_NAME}::${CLASS_NAME}
+(
+  ${DEFINITION_NAME}* action
+)
+:m_action(action)
+{
+
+}
+
+
+//*****************************************************************************
+ActionMessage::${CLASS_NAME}::~${CLASS_NAME}()
+{
+
+}
+
+
+//*****************************************************************************
+void ActionMessage::${CLASS_NAME}::actionEncode
+(
+  vector<uint8_t>& data
+)
+{
+  data.resize(${DEFINITION_NAME}::PACKET_SIZE);
+
+  data[TYPE_ID_POSITION] = ${DEFINITION_NAME}::TYPE_ID;
+${MEMCPY_STATEMENTS}
+}

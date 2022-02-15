@@ -1,0 +1,28 @@
+#ifndef ACTIONMESSAGE_${CLASS_NAME}_H
+#define ACTIONMESSAGE_${CLASS_NAME}_H
+
+#include "ActionMessage/${DEFINITION_NAME}.h"
+#include "Utils/shared_ptr.h"
+#include "Utils/vector.h"
+
+namespace ActionMessage
+{
+
+class ${CLASS_NAME}
+{
+public:
+  ${CLASS_NAME}(
+    ${DEFINITION_NAME}* action);
+
+  virtual ~${CLASS_NAME}();
+
+  virtual void actionEncode(
+    vector<uint8_t>& data);
+
+private:
+  ActionMessage::${DEFINITION_NAME}* m_action;
+};
+
+}
+
+#endif

@@ -1,0 +1,20 @@
+############################################
+#            General Sim Config            #
+############################################
+sim_homePoint = <0, 0, 30>
+sim_startPoint = <0, 0, 30>
+sim_armLength = 50
+sim_forarmLength = 50
+sim_degreesPerSecond = 200
+sim_port = 4444
+
+
+############################################
+#              Motor Config                #
+############################################
+baseMotor_minAngle = 0
+baseMotor_maxAngle = 360
+shoulderMotor_minAngle = 0
+shoulderMotor_maxAngle = 360
+elbowMotor_minAngle = 0
+elbowMotor_maxAngle = 360
