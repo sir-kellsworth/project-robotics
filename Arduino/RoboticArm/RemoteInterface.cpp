@@ -27,7 +27,7 @@ RemoteInterface::~RemoteInterface()
 //*****************************************************************
 bool RemoteInterface::actionGet
 (
-  unique_ptr<ActionMessage::Action>& nextAction
+  shared_ptr<ActionMessage::Action>& nextAction
 )
 {
   bool success(false);
@@ -39,7 +39,8 @@ bool RemoteInterface::actionGet
     {
       data[i] = Serial.read();
     }
-    nextAction = ActionMessage::ActionFactory::messageGenerate(data);
+    shared_ptr<ActionMessage::Action> test(
+      ActionMessage::ActionFactory::messageGenerate(data).get());
     success = true;
   }
 
@@ -48,29 +49,12 @@ bool RemoteInterface::actionGet
 
 
 //*****************************************************************
-void RemoteInterface::moveHandle
-(
-  unique_ptr<ActionMessage::MoveAction> moveAction
-)
-{
-  
-}
-
-
-//*****************************************************************
 void RemoteInterface::step()
 {
-  unique_ptr<ActionMessage::Action> nextAction;
+  shared_ptr<ActionMessage::Action> nextAction;
 
   if(actionGet(nextAction))
   {
-    if(nextAction->messageTypeGet() == ActionMessage::MoveAction::TYPE_ID)
-    {
-      unique_ptr<ActionMessage::MoveAction> move =
-        unique_ptr<ActionMessage::MoveAction>(
-          (ActionMessage::MoveAction*)nextAction.get());
-
-      moveHandle(move);
-    }
+    m_arm.actionSend(nextAction);
   }
 }
