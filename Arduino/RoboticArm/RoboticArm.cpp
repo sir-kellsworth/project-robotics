@@ -7,10 +7,23 @@ namespace
 {
   const uint16_t STEPPER_SPEED_MAX(1000);
   const uint16_t STEPPER_SPEED_DEFAULT(400);
+  const float DEGREE_STEPS(1.8);
 }
 
 //*****************************************************************************
-RoboticArm::RoboticArm()
+RoboticArm::RoboticArm
+(
+  uint8_t baseStepPin,
+  uint8_t baseDirPin,
+  uint8_t shoulderStepPin,
+  uint8_t shoulderDirPin,
+  uint8_t elbowStepPin,
+  uint8_t elbowDirPin,
+  uint16_t armLength,
+  uint16_t forarmLength,
+  Pathing::Point homePoint,
+  Pathing::Point startPoint
+)
 :m_baseMotor(AccelStepper::DRIVER, baseStepPin, baseDirPin),
  m_shoulderMotor(AccelStepper::DRIVER, shoulderStepPin, shoulderDirPin),
  m_elbowMotor(AccelStepper::DRIVER, elbowStepPin, elbowDirPin),
@@ -78,15 +91,15 @@ void RoboticArm::moveHandle
     moveAction->yGet(),
     moveAction->zGet());
 
-    if(goal.xGet() == NO_MOVEMENT)
+    if(goal.xGet() == Utils::NO_MOVEMENT)
     {
       goal.xSet(m_currentPosition.xGet());
     }
-    if(goal.yGet() == NO_MOVEMENT)
+    if(goal.yGet() == Utils::NO_MOVEMENT)
     {
       goal.ySet(m_currentPosition.yGet());
     }
-    if(goal.zGet() == NO_MOVEMENT)
+    if(goal.zGet() == Utils::NO_MOVEMENT)
     {
       goal.zSet(m_currentPosition.zGet());
     }
@@ -124,10 +137,11 @@ void RoboticArm::moveTo
     uint16_t shoulderPosition(0);
     uint16_t elbowPosition(0);
 
-    Utils::positionsCalculate(
+    Utils::stepperPositionCalculate(
       baseAngle,
       shoulderAngle,
       elbowAngle,
+      DEGREE_STEPS,
       basePosition,
       shoulderPosition,
       elbowPosition);

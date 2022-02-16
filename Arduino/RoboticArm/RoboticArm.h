@@ -10,7 +10,17 @@
 class RoboticArm : public ControlInterface::Device
 {
 public:
-  RoboticArm();
+  RoboticArm(
+    uint8_t baseStepPin,
+    uint8_t baseDirPin,
+    uint8_t shoulderStepPin,
+    uint8_t shoulderDirPin,
+    uint8_t elbowStepPin,
+    uint8_t elbowDirPin,
+    uint16_t armLength,
+    uint16_t forarmLength,
+    Pathing::Point homePoint,
+    Pathing::Point startPoint);
 
   virtual ~RoboticArm();
 
@@ -37,6 +47,13 @@ private:
   AccelStepper m_baseMotor;
   AccelStepper m_shoulderMotor;
   AccelStepper m_elbowMotor;
+
+  float m_baseAngleMax;
+  float m_baseAngleMin;
+  float m_shoulderAngleMax;
+  float m_shoulderAngleMin;
+  float m_elbowAngleMax;
+  float m_elbowAngleMin;
 
   uint32_t m_armLength;
   uint32_t m_forarmLength;

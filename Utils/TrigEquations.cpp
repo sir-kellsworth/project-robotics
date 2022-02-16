@@ -31,6 +31,18 @@ void Utils::anglesCalculate
 }
 
 
+//*****************************************************************************
+bool Utils::boundsCheck
+(
+  float angle,
+  float minAngle,
+  float maxAngle
+)
+{
+  return angle >= minAngle && angle <= maxAngle;
+}
+
+
 //***************************************************************************
 float Utils::lawOfCosines
 (
@@ -84,4 +96,22 @@ float Utils::squared
 )
 {
   return a * a;
+}
+
+
+//***************************************************************************
+void Utils::stepperPositionCalculate
+(
+  float baseAngle,
+  float shoulderAngle,
+  float elbowAngle,
+  float degreeSteps,
+  uint16_t& basePosition,
+  uint16_t& shoulderPosition,
+  uint16_t& elbowPosition
+)
+{
+  basePosition = baseAngle * degreeSteps;
+  shoulderPosition = shoulderAngle * degreeSteps;
+  elbowPosition = elbowAngle * degreeSteps;
 }
