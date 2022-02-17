@@ -4,6 +4,7 @@
 #include "ActionMessage/MoveAction.h"
 #include "ControlInterface/Device.h"
 #include "Pathing/Point.h"
+#include "Utils/Queue.h"
 
 #include "AccelStepper.h"
 
@@ -60,6 +61,8 @@ private:
 
   Pathing::Point m_home;
   Pathing::Point m_currentPosition;
+
+  Utils::Queue<ActionMessage::Action> m_queue;
 };
 
 #endif

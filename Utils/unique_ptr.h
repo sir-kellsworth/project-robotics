@@ -57,6 +57,7 @@ public:
   T* operator->() const { return pt; }
   T* get() const { return pt; }
   T& operator*() const { return *pt; }
+  T* release() { T* tmp = pt; pt = 0; return tmp; }
 
 private:
   T* pt;

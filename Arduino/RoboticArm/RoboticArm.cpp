@@ -56,13 +56,7 @@ void RoboticArm::actionSend
   shared_ptr<ActionMessage::Action> action
 )
 {
-  if(action->messageTypeGet() == ActionMessage::MoveAction::TYPE_ID)
-  {
-    ActionMessage::MoveAction* move =
-        (ActionMessage::MoveAction*)action.get();
-
-    moveHandle(move);
-  }
+  m_queue.push(action);
 }
 
 
@@ -156,6 +150,17 @@ void RoboticArm::moveTo
 //*****************************************************************************
 void RoboticArm::step()
 {
+  shared_ptr<ActionMessage::Action> action = m_queue.pop();
+  if(action.get() != 0)
+  {
+    if(action->messageTypeGet() == ActionMessage::MoveAction::TYPE_ID)
+    {
+      ActionMessage::MoveAction* move =
+          (ActionMessage::MoveAction*)action.get();
+
+      moveHandle(move);
+    }
+  }
   //eventually, acceleration will be enabled. But for now, only use const speeds
   //to use acceleration, use .run() instead
   m_baseMotor.runSpeed();

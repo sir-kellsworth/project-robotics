@@ -40,7 +40,7 @@ bool RemoteInterface::actionGet
       data[i] = Serial.read();
     }
     shared_ptr<ActionMessage::Action> test(
-      ActionMessage::ActionFactory::messageGenerate(data).get());
+      ActionMessage::ActionFactory::messageGenerate(data).release());
     success = true;
   }
 

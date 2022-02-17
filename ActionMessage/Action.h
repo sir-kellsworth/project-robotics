@@ -9,6 +9,16 @@ inline void operator delete(void* ptr, unsigned int size)
     free(ptr);
 }
 
+inline void operator delete[](void* ptr, unsigned int size)
+{
+  void* next = ptr;
+  for(int i = 0; i < size; ++i)
+  {
+    free(next);
+    ++next;
+  }
+}
+
 namespace ActionMessage
 {
 
