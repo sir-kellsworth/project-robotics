@@ -1,5 +1,9 @@
 #include "RoboticArm.h"
 
+#include "ActionMessage/HomeAction.h"
+#include "ActionMessage/PowerDownAction.h"
+#include "ActionMessage/PowerUpAction.h"
+#include "ActionMessage/KillAction.h"
 #include "Utils/TrigEquations.h"
 
 
@@ -159,6 +163,24 @@ void RoboticArm::step()
           (ActionMessage::MoveAction*)action.get();
 
       moveHandle(move);
+    }
+    else if(action->messageTypeGet() == ActionMessage::HomeAction::TYPE_ID)
+    {
+      ActionMessage::MoveAction home(m_home.xGet(), m_home.yGet(), m_home.zGet());
+
+      moveHandle(&home);
+    }
+    else if(action->messageTypeGet() == ActionMessage::PowerDownAction::TYPE_ID)
+    {
+      powerDownSend();
+    }
+    else if(action->messageTypeGet() == ActionMessage::PowerUpAction::TYPE_ID)
+    {
+      powerUpSend();
+    }
+    else if(action->messageTypeGet() == ActionMessage::KillAction::TYPE_ID)
+    {
+      powerDownSend();
     }
   }
   //eventually, acceleration will be enabled. But for now, only use const speeds
