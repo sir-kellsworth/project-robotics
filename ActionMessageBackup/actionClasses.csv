@@ -1,9 +1,0 @@
-ClassName, numParams, paramType, paramNumBytes, Param1, Param2,...
-FailedAction, 0
-HomeAction, 0
-KillAction, 0
-MoveAction, 1, 12, Pathing::Point, point
-NoAction, 0
-PowerDownAction, 0
-PowerUpAction, 0
-SuccessAction, 0
