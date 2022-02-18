@@ -85,6 +85,7 @@ unique_ptr<ActionMessage::Action> ActionMessage::ActionFactory::messageGenerate
 }
 
 
+#include <iostream>
 //*****************************************************************************
 unique_ptr<ActionMessage::ActionEncoder> ActionMessage::ActionFactory::encoderGet
 (
@@ -116,6 +117,7 @@ unique_ptr<ActionMessage::ActionEncoder> ActionMessage::ActionFactory::encoderGe
     encoder = encoderGetSub<
       ActionMessage::MoveActionEncoder,
       ActionMessage::MoveAction>(action);
+    std::cout << encoder.get() << std::endl;
   }
   else if(action->messageTypeGet() == ActionMessage::NoAction::TYPE_ID)
   {

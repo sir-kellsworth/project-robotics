@@ -22,6 +22,7 @@ unique_ptr<ActionMessage::ActionEncoder> encoderGetSub(
 } }
 
 
+#include <iostream>
 template<class ActionEncoder, class ActionClass>
 unique_ptr<ActionMessage::ActionEncoder> ActionMessage::ActionFactory::encoderGetSub
 (
@@ -30,7 +31,7 @@ unique_ptr<ActionMessage::ActionEncoder> ActionMessage::ActionFactory::encoderGe
 {
 #ifdef __linux__
   return unique_ptr<ActionMessage::ActionEncoder>(
-    dynamic_cast<ActionMessage::ActionEncoder*>(
+    reinterpret_cast<ActionMessage::ActionEncoder*>(
       new ActionEncoder(
         dynamic_cast<ActionClass*>(
           action.get()))));

@@ -1,5 +1,8 @@
 ############################################
 #        General Controller Config         #
 ############################################
-remoteController_ipAddress = 127.0.0.1
-remoteController_port = 4444
+remoteController_interfaceType = serial
+remoteController_serial_deviceName = "/dev/ttyACM0"
+remoteController_serial_baudRate = 112500
+remoteController_tcp_ipAddress = 127.0.0.1
+remoteController_tcp_port = 4444

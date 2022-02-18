@@ -30,12 +30,15 @@ void Remote::RemoteInterface::actionSend
   std::shared_ptr<ActionMessage::Action> nextAction
 )
 {
-  std::unique_ptr<ActionMessage::ActionEncoder> encoder
-    = ActionMessage::ActionFactory::encoderGet(nextAction);
-  std::vector<uint8_t> data;
-  encoder->actionEncode(data);
+  if(nextAction.get() != 0)
+  {
+    std::unique_ptr<ActionMessage::ActionEncoder> encoder
+      = ActionMessage::ActionFactory::encoderGet(nextAction);
+    std::vector<uint8_t> data;
+    encoder->actionEncode(data);
 
-  m_socket->send(data);
+    m_socket->send(data);
+  }
 }
 
 

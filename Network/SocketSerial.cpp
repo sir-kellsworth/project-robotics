@@ -13,7 +13,7 @@ Network::SocketSerial::SocketSerial
   const std::string& deviceName,
   uint16_t baudRate
 )
-:m_handle(open(deviceName.c_str(), O_RDWR))
+:m_handle(open(deviceName.c_str(), O_RDWR | O_NOCTTY | O_SYNC))
 {
   if(m_handle < 0)
   {
@@ -34,7 +34,7 @@ Network::SocketSerial::SocketSerial
   tty.c_lflag &= ~ISIG;
 
   //set baudrate
-  cfsetspeed(&tty, B9600);
+  cfsetspeed(&tty, B115200);
 
   if(tcsetattr(m_handle, TCSANOW, &tty) != 0)
   {

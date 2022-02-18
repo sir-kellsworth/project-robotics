@@ -79,7 +79,8 @@ std::shared_ptr<ActionMessage::Action> ControlInterface::CommandLineInterface::c
   }
   else if(command == COMMAND_MOVE_TO)
   {
-    if(args.size() != MOVE_TO_NUM_ARGS){
+    if(args.size() != MOVE_TO_NUM_ARGS)
+    {
       std::cout << "invalid number of args" << std::endl;
       action = std::shared_ptr<ActionMessage::NoAction>(new ActionMessage::NoAction);
     }
