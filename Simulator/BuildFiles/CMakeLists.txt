@@ -85,6 +85,8 @@ set(SOURCE_COMMAND_INTERFACE
 )
 
 set(SOURCE_NETWORK
+  ${NETWORK_DIR}/Socket.cpp
+  ${NETWORK_DIR}/Socket.h
   ${NETWORK_DIR}/ServerTcp.cpp
   ${NETWORK_DIR}/ServerTcp.h
   ${NETWORK_DIR}/SocketTcp.cpp

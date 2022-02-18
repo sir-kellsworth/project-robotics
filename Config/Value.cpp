@@ -70,7 +70,7 @@ Pathing::Point Config::Value::valueGet()
 
 //*****************************************************************************
 template<>
-uint32_t Config::Value::valueGet()
+uint16_t Config::Value::valueGet()
 {
   return std::stoi(m_data);
 }
@@ -78,7 +78,7 @@ uint32_t Config::Value::valueGet()
 
 //*****************************************************************************
 template<>
-unsigned short Config::Value::valueGet()
+uint32_t Config::Value::valueGet()
 {
   return std::stoi(m_data);
 }

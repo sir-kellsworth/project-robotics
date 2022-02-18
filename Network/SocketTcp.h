@@ -1,13 +1,12 @@
 #ifndef NETWORK_SOCKETTCP_H
 #define NETWORK_SOCKETTCP_H
 
-#include <string>
-#include <vector>
+#include "Network/Socket.h"
 
 namespace Network
 {
 
-class SocketTcp
+class SocketTcp : public Socket
 {
 public:
   SocketTcp(
@@ -17,12 +16,12 @@ public:
   SocketTcp(
     int handle);
 
-  ~SocketTcp();
+  virtual ~SocketTcp();
 
-  bool send(
+  virtual bool send(
     const std::vector<uint8_t>& data);
 
-  uint32_t read(
+  virtual uint32_t read(
     std::vector<uint8_t>& data);
 private:
   int m_handle;

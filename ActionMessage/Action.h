@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#ifndef __linux__
 inline void operator delete(void* ptr, unsigned int size)
 {
     free(ptr);
@@ -18,6 +19,7 @@ inline void operator delete[](void* ptr, unsigned int size)
     ++next;
   }
 }
+#endif
 
 namespace ActionMessage
 {

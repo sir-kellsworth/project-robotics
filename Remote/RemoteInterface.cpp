@@ -9,10 +9,9 @@
 //*****************************************************************************
 Remote::RemoteInterface::RemoteInterface
 (
-  const std::string& ip,
-  unsigned short port
+  std::unique_ptr<Network::Socket>& socket
 )
-:m_socket(ip, port)
+:m_socket(std::move(socket))
 {
 
 }
@@ -36,7 +35,7 @@ void Remote::RemoteInterface::actionSend
   std::vector<uint8_t> data;
   encoder->actionEncode(data);
 
-  m_socket.send(data);
+  m_socket->send(data);
 }
 
 
