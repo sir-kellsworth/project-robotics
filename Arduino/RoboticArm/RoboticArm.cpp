@@ -69,6 +69,17 @@ void RoboticArm::actionSend
 
 
 //*****************************************************************************
+//This function should not be used
+shared_ptr<ActionMessage::Action> RoboticArm::actionSendReply
+(
+  shared_ptr<ActionMessage::Action> action
+)
+{
+  return shared_ptr<ActionMessage::Action>();
+}
+
+
+//*****************************************************************************
 bool RoboticArm::anglesValidate
 (
   float baseAngle,
@@ -173,7 +184,13 @@ void RoboticArm::step()
       ActionMessage::MoveAction* move =
           (ActionMessage::MoveAction*)action.get();
 
-      moveHandle(move);
+      shared_ptr<ActionMessage::Action> response = moveHandle(move);
+      vector<uint8_t> data;
+      unique_ptr<ActionMessage::ActionEncoder> encoder
+        = ActionMessage::ActionFactory::encoderGet(response);
+      encoder->actionEncode(data);
+
+      Serial.write(data.data(), data.size());
     }
     else if(action->messageTypeGet() == ActionMessage::HomeAction::TYPE_ID)
     {
@@ -184,6 +201,8 @@ void RoboticArm::step()
       unique_ptr<ActionMessage::ActionEncoder> encoder
         = ActionMessage::ActionFactory::encoderGet(response);
       encoder->actionEncode(data);
+
+      Serial.write(data.data(), data.size());
     }
     else if(action->messageTypeGet() == ActionMessage::PowerDownAction::TYPE_ID)
     {

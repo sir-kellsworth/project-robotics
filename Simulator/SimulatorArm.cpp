@@ -63,6 +63,17 @@ void Simulator::SimulatorArm::actionSend
 
 
 //*****************************************************************************
+//This function should not be used
+shared_ptr<ActionMessage::Action> Simulator::SimulatorArm::actionSendReply
+(
+  shared_ptr<ActionMessage::Action> action
+)
+{
+  return shared_ptr<ActionMessage::Action>();
+}
+
+
+//*****************************************************************************
 void Simulator::SimulatorArm::anglesPrint()
 {
   std::cout << "angles: " << std::endl;

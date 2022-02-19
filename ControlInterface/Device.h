@@ -15,7 +15,7 @@ public:
     shared_ptr<ActionMessage::Action> nextAction) = 0;
 
   virtual shared_ptr<ActionMessage::Action> actionSendReply(
-    std::shared_ptr<ActionMessage::Action> nextAction) = 0;
+    shared_ptr<ActionMessage::Action> nextAction) = 0;
 
   virtual void powerDownSend() = 0;
 

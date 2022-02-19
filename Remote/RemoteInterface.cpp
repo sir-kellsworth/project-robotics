@@ -58,6 +58,7 @@ shared_ptr<ActionMessage::Action> Remote::RemoteInterface::actionSendReply
 
     m_socket->send(data);
 
+    data.resize(20);
     m_socket->read(data);
     reply = ActionMessage::ActionFactory::messageGenerate(data);
   }
