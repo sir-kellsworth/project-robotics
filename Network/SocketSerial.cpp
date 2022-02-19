@@ -13,8 +13,8 @@ Network::SocketSerial::SocketSerial
   const std::string& deviceName,
   uint16_t baudRate
 )
-:m_handle(open(deviceName.c_str(), O_RDWR | O_NOCTTY | O_SYNC))
 {
+  m_handle = open("/dev/ttyACM0", O_RDWR | O_NOCTTY | O_SYNC);
   if(m_handle < 0)
   {
     std::cout << "failed to open serial device: " << deviceName << std::endl;
@@ -93,6 +93,7 @@ uint32_t Network::SocketSerial::read
   {
     bytesRead = ::read(m_handle, data.data(), data.size());
   }
+  std::cout << "read " << bytesRead << std::endl;
 
   return bytesRead;
 }

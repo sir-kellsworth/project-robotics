@@ -15,7 +15,7 @@ public:
 
   ~CommandLineInterface();
 
-  std::shared_ptr<ActionMessage::Action> commandParse(
+  void commandParse(
     const std::string& command);
 
   void deviceSet(

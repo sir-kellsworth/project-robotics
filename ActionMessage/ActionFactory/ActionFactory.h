@@ -22,7 +22,6 @@ unique_ptr<ActionMessage::ActionEncoder> encoderGetSub(
 } }
 
 
-#include <iostream>
 template<class ActionEncoder, class ActionClass>
 unique_ptr<ActionMessage::ActionEncoder> ActionMessage::ActionFactory::encoderGetSub
 (

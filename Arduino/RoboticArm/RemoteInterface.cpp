@@ -49,6 +49,21 @@ bool RemoteInterface::actionGet
 
 
 //*****************************************************************
+void RemoteInterface::send
+(
+  const shared_ptr<ActionMessage::Action>& response
+)
+{
+  vector<uint8_t> data;
+  unique_ptr<ActionMessage::ActionEncoder> encoder
+    = ActionMessage::ActionFactory::encoderGet(response);
+  encoder->actionEncode(data);
+
+  Serial.write(data.data(), data.size());
+}
+
+
+//*****************************************************************
 void RemoteInterface::step()
 {
   shared_ptr<ActionMessage::Action> nextAction;

@@ -5,6 +5,7 @@
 #include "ControlInterface/Device.h"
 #include "Pathing/Point.h"
 #include "Utils/Queue.h"
+#include "Utils/memory.h"
 
 #include "AccelStepper.h"
 
@@ -39,11 +40,14 @@ private:
     float shoulderAngle,
     float elbowAngle);
 
-  void moveHandle(
+  //void messageSend(
+  //  const unique_ptr<ActionMessage::Action>& response);
+
+  shared_ptr<ActionMessage::Action> moveHandle(
     ActionMessage::MoveAction* moveAction);
 
-    void moveTo(
-      Pathing::Point goal);
+  shared_ptr<ActionMessage::Action> moveTo(
+    Pathing::Point goal);
 
   AccelStepper m_baseMotor;
   AccelStepper m_shoulderMotor;
@@ -62,7 +66,7 @@ private:
   Pathing::Point m_home;
   Pathing::Point m_currentPosition;
 
-  Utils::Queue<ActionMessage::Action> m_queue;
+  Utils::Queue<ActionMessage::Action> m_actionQueue;
 };
 
 #endif

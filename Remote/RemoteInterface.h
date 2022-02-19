@@ -19,6 +19,9 @@ public:
   virtual void actionSend(
     std::shared_ptr<ActionMessage::Action> nextAction);
 
+  virtual shared_ptr<ActionMessage::Action> actionSendReply(
+    std::shared_ptr<ActionMessage::Action> nextAction);
+
   virtual void powerDownSend();
 
   virtual void powerUpSend();

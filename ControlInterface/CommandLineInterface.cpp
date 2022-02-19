@@ -4,6 +4,7 @@
 #include "ActionMessage/HomeAction.h"
 #include "ActionMessage/MoveAction.h"
 #include "ActionMessage/NoAction.h"
+#include "ActionMessage/SuccessAction.h"
 #include "Pathing/Point.h"
 
 #include <iostream>
@@ -58,7 +59,7 @@ ControlInterface::CommandLineInterface::~CommandLineInterface()
 
 
 //*****************************************************************************
-std::shared_ptr<ActionMessage::Action> ControlInterface::CommandLineInterface::commandParse
+void ControlInterface::CommandLineInterface::commandParse
 (
   const std::string& commandString
 )
@@ -67,48 +68,52 @@ std::shared_ptr<ActionMessage::Action> ControlInterface::CommandLineInterface::c
   std::string command = args[0];
   args.erase(args.begin());
 
-  std::shared_ptr<ActionMessage::Action> action;
   if(command == COMMAND_HOME)
   {
-    action = std::shared_ptr<ActionMessage::HomeAction>(new ActionMessage::HomeAction);
+    std::cout << "not implemented yet" << std::endl;
   }
   else if(command == COMMAND_QUIT)
   {
     m_running = false;
-    action = std::shared_ptr<ActionMessage::KillAction>(new ActionMessage::KillAction);
+    std::shared_ptr<ActionMessage::Action>action = std::shared_ptr<ActionMessage::KillAction>(new ActionMessage::KillAction);
   }
   else if(command == COMMAND_MOVE_TO)
   {
     if(args.size() != MOVE_TO_NUM_ARGS)
     {
       std::cout << "invalid number of args" << std::endl;
-      action = std::shared_ptr<ActionMessage::NoAction>(new ActionMessage::NoAction);
     }
     else
     {
-      action = std::shared_ptr<ActionMessage::MoveAction>(
-        new ActionMessage::MoveAction(
-          stof(args[0]),
-          stof(args[1]),
-          stof(args[2])
-        ));
+      std::shared_ptr<ActionMessage::Action> action
+        = std::shared_ptr<ActionMessage::MoveAction>(
+          new ActionMessage::MoveAction(
+            stof(args[0]),
+            stof(args[1]),
+            stof(args[2])));
+
+      if(m_device->actionSendReply(action)->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
+      {
+        std::cout << "success" << std::endl;
+      }
+      else
+      {
+        std::cout << "failed to move" << std::endl;
+      }
     }
   }
   else if(command == COMMAND_POWER_DOWN)
   {
-
+    std::cout << "not implemented yet" << std::endl;
   }
   else if(command == COMMAND_POWER_UP)
   {
-
+    std::cout << "not implemented yet" << std::endl;
   }
   else
   {
-    action = std::shared_ptr<ActionMessage::NoAction>(new ActionMessage::NoAction);
     usagePrint();
   }
-
-  return action;
 }
 
 
@@ -131,7 +136,7 @@ void ControlInterface::CommandLineInterface::run()
     std::string command;
     std::getline(std::cin, command);
 
-    m_device->actionSend(commandParse(command));
+    commandParse(command);
   }
 }
 

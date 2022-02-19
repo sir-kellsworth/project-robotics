@@ -22,6 +22,9 @@ public:
   bool actionGet(
     shared_ptr<ActionMessage::Action>& nextAction);
 
+  void send(
+    const shared_ptr<ActionMessage::Action>& response);
+
   void step();
 
 private:

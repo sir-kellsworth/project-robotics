@@ -1,9 +1,13 @@
 #include "RoboticArm.h"
 
+#include "ActionMessage/ActionFactory/ActionFactory.h"
+#include "ActionMessage/ActionEncoder.h"
 #include "ActionMessage/HomeAction.h"
 #include "ActionMessage/PowerDownAction.h"
 #include "ActionMessage/PowerUpAction.h"
 #include "ActionMessage/KillAction.h"
+#include "ActionMessage/SuccessAction.h"
+#include "ActionMessage/FailedAction.h"
 #include "Utils/TrigEquations.h"
 
 
@@ -60,7 +64,7 @@ void RoboticArm::actionSend
   shared_ptr<ActionMessage::Action> action
 )
 {
-  m_queue.push(action);
+  m_actionQueue.push(action);
 }
 
 
@@ -79,7 +83,7 @@ bool RoboticArm::anglesValidate
 
 
 //*****************************************************************
-void RoboticArm::moveHandle
+shared_ptr<ActionMessage::Action> RoboticArm::moveHandle
 (
   ActionMessage::MoveAction* moveAction
 )
@@ -102,16 +106,17 @@ void RoboticArm::moveHandle
       goal.zSet(m_currentPosition.zGet());
     }
 
-    moveTo(goal);
+    return moveTo(goal);
 }
 
 
 //*****************************************************************
-void RoboticArm::moveTo
+shared_ptr<ActionMessage::Action> RoboticArm::moveTo
 (
   Pathing::Point goal
 )
 {
+  shared_ptr<ActionMessage::Action> response;
   float baseAngle(0);
   float shoulderAngle(0);
   float elbowAngle(0);
@@ -147,6 +152,12 @@ void RoboticArm::moveTo
     m_baseMotor.moveTo(basePosition);
     m_shoulderMotor.moveTo(shoulderPosition);
     m_elbowMotor.moveTo(elbowPosition);
+
+    response = shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
+  }
+  else
+  {
+    response = shared_ptr<ActionMessage::Action>(new ActionMessage::FailedAction());
   }
 }
 
@@ -154,7 +165,7 @@ void RoboticArm::moveTo
 //*****************************************************************************
 void RoboticArm::step()
 {
-  shared_ptr<ActionMessage::Action> action = m_queue.pop();
+  shared_ptr<ActionMessage::Action> action = m_actionQueue.pop();
   if(action.get() != 0)
   {
     if(action->messageTypeGet() == ActionMessage::MoveAction::TYPE_ID)
@@ -168,7 +179,11 @@ void RoboticArm::step()
     {
       ActionMessage::MoveAction home(m_home.xGet(), m_home.yGet(), m_home.zGet());
 
-      moveHandle(&home);
+      shared_ptr<ActionMessage::Action> response = moveHandle(&home);
+      vector<uint8_t> data;
+      unique_ptr<ActionMessage::ActionEncoder> encoder
+        = ActionMessage::ActionFactory::encoderGet(response);
+      encoder->actionEncode(data);
     }
     else if(action->messageTypeGet() == ActionMessage::PowerDownAction::TYPE_ID)
     {
