@@ -67,6 +67,14 @@ public:
        return data_[idx];
     }
 
+    const T* begin() {
+      return data_[0];
+    }
+
+    const T* end() {
+      return data_[count_];
+    }
+
     void resize_to_fit() {
         resize(count_);
     }

@@ -75,7 +75,38 @@ shared_ptr<ActionMessage::Action> RoboticArm::actionSendReply
   shared_ptr<ActionMessage::Action> action
 )
 {
-  return shared_ptr<ActionMessage::Action>();
+  return shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
+  shared_ptr<ActionMessage::Action> response;
+
+  if(action.get() != 0)
+  {
+    if(action->messageTypeGet() == ActionMessage::MoveAction::TYPE_ID)
+    {
+      ActionMessage::MoveAction* move = (ActionMessage::MoveAction*)action.get();
+
+      response = moveHandle(move);
+    }
+    else if(action->messageTypeGet() == ActionMessage::HomeAction::TYPE_ID)
+    {
+      ActionMessage::MoveAction home(m_home.xGet(), m_home.yGet(), m_home.zGet());
+
+      response = moveHandle(&home);
+    }
+    else if(action->messageTypeGet() == ActionMessage::PowerDownAction::TYPE_ID)
+    {
+      powerDownSend();
+    }
+    else if(action->messageTypeGet() == ActionMessage::PowerUpAction::TYPE_ID)
+    {
+      powerUpSend();
+    }
+    else if(action->messageTypeGet() == ActionMessage::KillAction::TYPE_ID)
+    {
+      powerDownSend();
+    }
+  }
+
+  return response;
 }
 
 
@@ -104,20 +135,20 @@ shared_ptr<ActionMessage::Action> RoboticArm::moveHandle
     moveAction->yGet(),
     moveAction->zGet());
 
-    if(goal.xGet() == Utils::NO_MOVEMENT)
-    {
-      goal.xSet(m_currentPosition.xGet());
-    }
-    if(goal.yGet() == Utils::NO_MOVEMENT)
-    {
-      goal.ySet(m_currentPosition.yGet());
-    }
-    if(goal.zGet() == Utils::NO_MOVEMENT)
-    {
-      goal.zSet(m_currentPosition.zGet());
-    }
+  if(goal.xGet() == Utils::NO_MOVEMENT)
+  {
+    goal.xSet(m_currentPosition.xGet());
+  }
+  if(goal.yGet() == Utils::NO_MOVEMENT)
+  {
+    goal.ySet(m_currentPosition.yGet());
+  }
+  if(goal.zGet() == Utils::NO_MOVEMENT)
+  {
+    goal.zSet(m_currentPosition.zGet());
+  }
 
-    return moveTo(goal);
+  return moveTo(goal);
 }
 
 
@@ -170,53 +201,14 @@ shared_ptr<ActionMessage::Action> RoboticArm::moveTo
   {
     response = shared_ptr<ActionMessage::Action>(new ActionMessage::FailedAction());
   }
+
+  return response;
 }
 
 
 //*****************************************************************************
 void RoboticArm::step()
 {
-  shared_ptr<ActionMessage::Action> action = m_actionQueue.pop();
-  if(action.get() != 0)
-  {
-    if(action->messageTypeGet() == ActionMessage::MoveAction::TYPE_ID)
-    {
-      ActionMessage::MoveAction* move =
-          (ActionMessage::MoveAction*)action.get();
-
-      shared_ptr<ActionMessage::Action> response = moveHandle(move);
-      vector<uint8_t> data;
-      unique_ptr<ActionMessage::ActionEncoder> encoder
-        = ActionMessage::ActionFactory::encoderGet(response);
-      encoder->actionEncode(data);
-
-      Serial.write(data.data(), data.size());
-    }
-    else if(action->messageTypeGet() == ActionMessage::HomeAction::TYPE_ID)
-    {
-      ActionMessage::MoveAction home(m_home.xGet(), m_home.yGet(), m_home.zGet());
-
-      shared_ptr<ActionMessage::Action> response = moveHandle(&home);
-      vector<uint8_t> data;
-      unique_ptr<ActionMessage::ActionEncoder> encoder
-        = ActionMessage::ActionFactory::encoderGet(response);
-      encoder->actionEncode(data);
-
-      Serial.write(data.data(), data.size());
-    }
-    else if(action->messageTypeGet() == ActionMessage::PowerDownAction::TYPE_ID)
-    {
-      powerDownSend();
-    }
-    else if(action->messageTypeGet() == ActionMessage::PowerUpAction::TYPE_ID)
-    {
-      powerUpSend();
-    }
-    else if(action->messageTypeGet() == ActionMessage::KillAction::TYPE_ID)
-    {
-      powerDownSend();
-    }
-  }
   //eventually, acceleration will be enabled. But for now, only use const speeds
   //to use acceleration, use .run() instead
   m_baseMotor.runSpeed();

@@ -28,6 +28,12 @@ public:
   void step();
 
 private:
+  bool endFound();
+
+  vector<uint8_t> m_buffer;
+  shared_ptr<ActionMessage::Action> m_nextAction;
+  bool m_actionAvailable;
+  uint8_t m_bufferIndex;
   RoboticArm& m_arm;
 };
 

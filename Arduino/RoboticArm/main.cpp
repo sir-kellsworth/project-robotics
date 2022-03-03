@@ -1,5 +1,6 @@
 #include "RoboticArm.h"
 #include "RemoteInterface.h"
+#include "ActionMessage/ActionFactory/ActionFactory.h"
 
 #include <Arduino.h>
 
@@ -35,12 +36,30 @@ RemoteInterface interface(arm);
 //*****************************************************************************
 void setup()
 {
-
+  Serial.begin(115200);
+  Serial.setTimeout(100);
 }
 
 
 //*****************************************************************************
 void loop()
 {
-  interface.step();
+  shared_ptr<ActionMessage::Action> nextAction;
+
+  if(interface.actionGet(nextAction))
+  {
+    Serial.print("got_action");
+    Serial.flush();
+    shared_ptr<ActionMessage::Action> response = arm.actionSendReply(nextAction);
+
+    vector<uint8_t> data;
+    unique_ptr<ActionMessage::ActionEncoder> encoder
+      = ActionMessage::ActionFactory::encoderGet(response);
+    encoder->actionEncode(data);
+
+    //Serial.write(data.data(), data.size());
+    //Serial.flush();
+  }
+
+  arm.step();
 }
