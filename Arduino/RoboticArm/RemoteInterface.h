@@ -14,8 +14,7 @@ namespace ActionMessage
 class RemoteInterface
 {
 public:
-  RemoteInterface(
-    RoboticArm& arm);
+  RemoteInterface();
 
   ~RemoteInterface();
 
@@ -34,7 +33,6 @@ private:
   shared_ptr<ActionMessage::Action> m_nextAction;
   bool m_actionAvailable;
   uint8_t m_bufferIndex;
-  RoboticArm& m_arm;
 };
 
 #endif

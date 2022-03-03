@@ -8,21 +8,17 @@
 
 namespace
 {
-  const uint8_t BUFFER_MAX_SIZE(20);
+  const uint8_t BUFFER_MAX_SIZE(500);
   const uint8_t NUM_END_BYTES(3);
   const uint8_t MESSAGE_END[3] = {0x44, 0x44, 0x44};
 }
 
 
 //*****************************************************************
-RemoteInterface::RemoteInterface
-(
-  RoboticArm& arm
-)
+RemoteInterface::RemoteInterface()
 :m_buffer(BUFFER_MAX_SIZE),
  m_actionAvailable(false),
- m_bufferIndex(0),
- m_arm(arm)
+ m_bufferIndex(0)
 {
 
 }
@@ -58,17 +54,13 @@ bool RemoteInterface::endFound()
   bool success(false);
   if(m_bufferIndex > NUM_END_BYTES)
   {
-    uint8_t* messagePtr = m_buffer.begin();
-    uint8_t* messageEnd = m_buffer.end();
-    uint8_t* endDataPtr = MESSAGE_END;
-    while(messagePtr != messageEnd)
+    uint8_t bufferStartIndex = m_bufferIndex - NUM_END_BYTES;
+    for(int i = 0; i < NUM_END_BYTES; ++i)
     {
-      if(messagePtr != endDataPtr)
+      if(m_buffer[bufferStartIndex + i] != MESSAGE_END[i])
       {
         return false;
       }
-      ++messagePtr;
-      ++endDataPtr;
     }
     success = true;
   }
@@ -105,13 +97,11 @@ void RemoteInterface::step()
 
     if(endFound())
     {
+      m_buffer.resize(m_buffer.size() - NUM_END_BYTES);
       m_nextAction.reset(
         ActionMessage::ActionFactory::messageGenerate(m_buffer).release());
       m_actionAvailable = true;
-      for(uint8_t i = 0; i < m_bufferIndex; ++i)
-      {
-        m_buffer[i] = 0;
-      }
+      memset((volatile void *)m_buffer.data(), 0, m_bufferIndex);
       m_bufferIndex = 0;
     }
   }

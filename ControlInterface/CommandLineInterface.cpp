@@ -92,7 +92,8 @@ void ControlInterface::CommandLineInterface::commandParse
             stof(args[1]),
             stof(args[2])));
 
-      if(m_device->actionSendReply(action)->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
+      std::shared_ptr<ActionMessage::Action> reply = m_device->actionSendReply(action);
+      if(reply.get() != 0 && reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
       {
         std::cout << "success" << std::endl;
       }

@@ -6,6 +6,11 @@
 
 #include <vector>
 
+namespace
+{
+  const uint16_t MAX_SIZE(500);
+}
+
 //*****************************************************************************
 Remote::RemoteInterface::RemoteInterface
 (
@@ -42,6 +47,7 @@ void Remote::RemoteInterface::actionSend
 }
 
 
+#include <iostream>
 //*****************************************************************************
 shared_ptr<ActionMessage::Action> Remote::RemoteInterface::actionSendReply
 (
@@ -58,8 +64,14 @@ shared_ptr<ActionMessage::Action> Remote::RemoteInterface::actionSendReply
 
     m_socket->send(data);
 
-    data.resize(20);
+    data.resize(MAX_SIZE);
     m_socket->read(data);
+    std::cout << "got data: ";
+    for(uint8_t& next: data)
+    {
+      std::cout << (char)next;
+    }
+    std::cout << std::endl;
     reply = ActionMessage::ActionFactory::messageGenerate(data);
   }
 

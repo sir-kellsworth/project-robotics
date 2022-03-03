@@ -3,6 +3,8 @@
 
 #include "Network/Socket.h"
 
+#include <mutex>
+
 namespace Network
 {
 
@@ -25,6 +27,7 @@ public:
     std::vector<uint8_t>& data);
 private:
   int m_handle;
+  std::mutex m_mutex;
 };
 
 }

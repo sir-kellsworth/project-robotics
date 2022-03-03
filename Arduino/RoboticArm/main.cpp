@@ -30,14 +30,13 @@ RoboticArm arm(
   forarmLength,
   homePoint,
   startPoint);
-RemoteInterface interface(arm);
+RemoteInterface interface;
 
 
 //*****************************************************************************
 void setup()
 {
   Serial.begin(115200);
-  Serial.setTimeout(100);
 }
 
 
@@ -48,8 +47,6 @@ void loop()
 
   if(interface.actionGet(nextAction))
   {
-    Serial.print("got_action");
-    Serial.flush();
     shared_ptr<ActionMessage::Action> response = arm.actionSendReply(nextAction);
 
     vector<uint8_t> data;
@@ -57,9 +54,10 @@ void loop()
       = ActionMessage::ActionFactory::encoderGet(response);
     encoder->actionEncode(data);
 
-    //Serial.write(data.data(), data.size());
-    //Serial.flush();
+    Serial.write(data.data(), data.size());
+    Serial.flush();
   }
 
+  interface.step();
   arm.step();
 }
