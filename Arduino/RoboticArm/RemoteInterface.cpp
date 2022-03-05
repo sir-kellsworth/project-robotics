@@ -10,7 +10,7 @@ namespace
 {
   const uint8_t BUFFER_MAX_SIZE(500);
   const uint8_t NUM_END_BYTES(3);
-  const uint8_t MESSAGE_END[3] = {0x44, 0x44, 0x44};
+  const uint8_t MESSAGE_END[NUM_END_BYTES] = {0x44, 0x44, 0x44};
 }
 
 
@@ -81,6 +81,8 @@ void RemoteInterface::send
   encoder->actionEncode(data);
 
   Serial.write(data.data(), data.size());
+  Serial.write(MESSAGE_END, NUM_END_BYTES);
+  Serial.flush();
 }
 
 

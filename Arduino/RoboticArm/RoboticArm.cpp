@@ -75,8 +75,7 @@ shared_ptr<ActionMessage::Action> RoboticArm::actionSendReply
   shared_ptr<ActionMessage::Action> action
 )
 {
-  return shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
-  shared_ptr<ActionMessage::Action> response;
+  shared_ptr<ActionMessage::Action> response(new ActionMessage::FailedAction());
 
   if(action.get() != 0)
   {
@@ -95,14 +94,20 @@ shared_ptr<ActionMessage::Action> RoboticArm::actionSendReply
     else if(action->messageTypeGet() == ActionMessage::PowerDownAction::TYPE_ID)
     {
       powerDownSend();
+
+      response.reset(new ActionMessage::SuccessAction());
     }
     else if(action->messageTypeGet() == ActionMessage::PowerUpAction::TYPE_ID)
     {
       powerUpSend();
+
+      response.reset(new ActionMessage::SuccessAction());
     }
     else if(action->messageTypeGet() == ActionMessage::KillAction::TYPE_ID)
     {
       powerDownSend();
+
+      response.reset(new ActionMessage::FailedAction());
     }
   }
 

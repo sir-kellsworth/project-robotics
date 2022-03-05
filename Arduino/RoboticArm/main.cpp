@@ -49,13 +49,7 @@ void loop()
   {
     shared_ptr<ActionMessage::Action> response = arm.actionSendReply(nextAction);
 
-    vector<uint8_t> data;
-    unique_ptr<ActionMessage::ActionEncoder> encoder
-      = ActionMessage::ActionFactory::encoderGet(response);
-    encoder->actionEncode(data);
-
-    Serial.write(data.data(), data.size());
-    Serial.flush();
+    interface.send(response);
   }
 
   interface.step();
