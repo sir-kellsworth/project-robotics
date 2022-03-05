@@ -19,127 +19,198 @@ using vector = std::vector<T>;
 template <typename T>
 class vector {
 public:
-    //empty constructor
-    vector() : capacity_(0), count_(0), data_(nullptr) {}
+  //***************************************************************************
+  vector()
+  :capacity_(0),
+   count_(0),
+   data_(nullptr)
+  {
 
-    vector(uint32_t size)
-    :capacity_(size),
-     count_(size),
-     data_(new T[count_])
-    {
+  }
 
-    }
 
-    // copy constructor
-    vector (const vector & rhs) : capacity_(0), count_(0), data_(nullptr)
-      {
-      data_ = new T [rhs.capacity_];
-      capacity_ = rhs.capacity_;
-      count_ = rhs.count_;
-      memcpy (data_, rhs.data_, sizeof (T) * count_);
-      }  // end of copy constructor
+  //***************************************************************************
+  vector
+  (
+    uint32_t size
+  )
+  :capacity_(size),
+   count_(0), //count_(size),
+   data_(new T[count_])
+  {
 
-    // operator=
-    vector & operator= (const vector & rhs)
-      {
-      // gracefully handle self-assignment (eg. a = a;)
-      if (this == &rhs )
-        return *this;
+  }
 
-      data_ = new T [rhs.capacity_];
-      capacity_ = rhs.capacity_;
-      count_ = rhs.count_;
-      memcpy (data_, rhs.data_, sizeof (T) * count_);
+  //***************************************************************************
+  vector
+  (
+    const vector& rhs
+  )
+  :capacity_(rhs.capacity_),
+   count_(rhs.count_),
+   data_(new T[rhs.capacity_])
+  {
+    memcpy (data_, rhs.data_, sizeof (T) * count_);
+  }
+
+  //***************************************************************************
+  vector& operator=
+  (
+    const vector& rhs
+  )
+  {
+    // gracefully handle self-assignment (eg. a = a;)
+    if (this == &rhs )
       return *this;
-      }  // end of operator=
 
-    // destructor
-    ~vector()
-      {
-        clear ();
-      }  // end of destructor
+    data_ = new T [rhs.capacity_];
+    capacity_ = rhs.capacity_;
+    count_ = rhs.count_;
+    memcpy (data_, rhs.data_, sizeof (T) * count_);
+    return *this;
+  }
 
-    T const & operator[] (unsigned int idx) const {
-       return data_[idx];
+  //***************************************************************************
+  ~vector()
+  {
+      clear ();
+  }
+
+
+  //***************************************************************************
+  const T& operator[]
+  (
+    unsigned int idx
+  ) const
+  {
+     return data_[idx];
+  }
+
+
+  //***************************************************************************
+  T& operator[]
+  (
+    unsigned int idx
+  )
+  {
+     return data_[idx];
+  }
+
+
+  //***************************************************************************
+  const T* begin()
+  {
+    return data_[0];
+  }
+
+
+  //***************************************************************************
+  const T* end()
+  {
+    return data_[count_];
+  }
+
+
+  //***************************************************************************
+  void resize_to_fit()
+  {
+      resize(count_);
+  }
+
+
+  //***************************************************************************
+  T& pop_back()
+  {
+      return data_[--count_];
+  }
+
+
+  //***************************************************************************
+  void push_back
+  (
+    const T& obj
+  )
+  {
+    if (capacity_ == count_)
+    {
+        resize(capacity_ + 1);
     }
 
-    T& operator[] (unsigned int idx) {
-       return data_[idx];
+    data_[count_++] = obj;
+  }
+
+
+  //***************************************************************************
+  bool isempty()
+  {
+      return count_ == 0;
+  }
+
+
+  //***************************************************************************
+  void clear()
+  {
+    delete [] data_;
+    data_ = nullptr;
+    count_ = 0;
+    capacity_ = 0;
+  }
+
+  T* data()
+  {
+      return data_;
+  }
+
+
+  //***************************************************************************
+  unsigned int size()
+  {
+      return count_;
+  }
+
+
+  //***************************************************************************
+  unsigned int capacity()
+  {
+      return capacity_;
+  }
+
+
+  //***************************************************************************
+  void resize
+  (
+    int capacity
+  )
+  {
+    if (data_ == nullptr)
+    {
+        data_ = new T[capacity];
+        count_ = 0;
+        capacity_ = capacity;
     }
-
-    const T* begin() {
-      return data_[0];
-    }
-
-    const T* end() {
-      return data_[count_];
-    }
-
-    void resize_to_fit() {
-        resize(count_);
-    }
-
-    T& pop_back(){
-        return data_[--count_];
-    }
-
-    void push_back(T obj)
-        {
-        if (capacity_ == count_) {
-            resize(capacity_ + 1);
-        }
-
-        data_[count_++] = obj;
-    }
-
-    bool isempty() {
-        return count_ == 0;
-    }
-
-    void clear() {
+    else if (capacity > capacity_)
+    {
+      // allocate new memory
+      T* data = new T[capacity];
+      // count can't be higher than capacity
+      count_ = min(count_, capacity);
+      capacity_ = capacity;
+      // copy data across to new pointer
+      memcpy(data, data_, sizeof(T) * count_);
+      // delete old pointer
       delete [] data_;
-      data_ = nullptr;
-      count_ = capacity_ = 0;
+      // now remember the new pointer
+      data_ = data;
     }
-
-    T* data() {
-        return data_;
+    else if(capacity > 0)
+    {
+      count_ = capacity;
     }
-
-    int size() {
-        return count_;
-    }
-
-    int capacity() {
-        return capacity_;
-    }
-
-    void resize(int capacity) {
-        if (data_ == nullptr) {
-            data_ = new T[capacity];
-            count_ = 0;
-            capacity_ = capacity;
-        }
-        else if (capacity > capacity_) { //else do nothing
-
-            // allocate new memory
-            T* data = new T[capacity];
-            // count can't be higher than capacity
-            count_ = min(count_, capacity);
-            capacity_ = capacity;
-            // copy data across to new pointer
-            memcpy(data, data_, sizeof(T) * count_);
-            // delete old pointer
-            delete [] data_;
-            // now remember the new pointer
-            data_ = data;
-        }
-    }
+  }
 protected:
-
-        int capacity_;
-        int count_;
-        T* data_;
+  unsigned int capacity_;
+  unsigned int count_;
+  T* data_;
 };
 
 #endif

@@ -115,11 +115,14 @@ uint32_t Network::SocketSerial::read
   {
     bytesRead = ::read(m_handle, data.data(), data.size());
   }
-  data.resize(bytesRead);
   std::cout << "read " << bytesRead << " bytes (including end bytes)" << std::endl;
 
+  if(bytesRead - NUM_END_BYTES > 0)
+  {
+    bytesRead -= NUM_END_BYTES;
+  }
   //arduino requires that end bytes are attached
-  data.resize(data.size()-3);
+  data.resize(bytesRead);
 
   return bytesRead;
 }
