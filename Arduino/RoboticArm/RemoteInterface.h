@@ -5,24 +5,34 @@
 
 #include "Utils/unique_ptr.h"
 
+namespace ActionMessage
+{
+  class Action;
+  class MoveAction;
+}
+
 class RemoteInterface
 {
 public:
-  RemoteInterface(
-    RoboticArm& arm);
+  RemoteInterface();
 
   ~RemoteInterface();
 
   bool actionGet(
-    unique_ptr<ActionMessage::Action>& nextAction);
+    shared_ptr<ActionMessage::Action>& nextAction);
+
+  void send(
+    const shared_ptr<ActionMessage::Action>& response);
 
   void step();
 
 private:
-  void moveHandle(
-    unique_ptr<ActionMessage::MoveAction> moveAction);
+  bool endFound();
 
-  RoboticArm& m_arm;
+  vector<uint8_t> m_buffer;
+  shared_ptr<ActionMessage::Action> m_nextAction;
+  bool m_actionAvailable;
+  uint8_t m_bufferIndex;
 };
 
 #endif

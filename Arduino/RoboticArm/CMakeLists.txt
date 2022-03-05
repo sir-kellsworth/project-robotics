@@ -9,6 +9,7 @@ set(ARDUINO_CONTROL_CODE_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(ACTION_MESSAGE_DIR ${BASE_DIR}/ActionMessage)
 set(UTILS_DIR ${BASE_DIR}/Utils)
 set(PATHING_DIR ${BASE_DIR}/Pathing)
+set(VENDOR_DIR ${BASE_DIR}/Arduino/vendor)
 
 set(SOURCE_ACTION_MESSAGE
   ${ACTION_MESSAGE_DIR}/Action.cpp
@@ -90,16 +91,23 @@ set(SOURCE_PATHING
   ${PATHING_DIR}/Point.h
 )
 
+set(SOURCE_VENDOR
+  ${VENDOR_DIR}/AccelStepper.cpp
+  ${VENDOR_DIR}/AccelStepper.h
+)
+
 set(SOURCE_ALL
   ${SOURCE_ARDUINO_CONTROL_CODE}
   ${SOURCE_ACTION_MESSAGE}
   ${SOURCE_UTILS}
   ${SOURCE_PATHING}
+  ${SOURCE_VENDOR}
 )
 
 include_directories(
   "${BASE_DIR}/"
   "${CMAKE_CURRENT_LIST_DIR}/"
+  "${VENDOR_DIR}/"
 )
 
 

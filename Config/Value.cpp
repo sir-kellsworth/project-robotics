@@ -3,6 +3,7 @@
 #include "Pathing/Point.h"
 #include "Utils/StringUtils.h"
 
+#include <algorithm>
 #include <iostream>
 
 //*****************************************************************************
@@ -70,7 +71,7 @@ Pathing::Point Config::Value::valueGet()
 
 //*****************************************************************************
 template<>
-uint32_t Config::Value::valueGet()
+uint16_t Config::Value::valueGet()
 {
   return std::stoi(m_data);
 }
@@ -78,7 +79,7 @@ uint32_t Config::Value::valueGet()
 
 //*****************************************************************************
 template<>
-unsigned short Config::Value::valueGet()
+uint32_t Config::Value::valueGet()
 {
   return std::stoi(m_data);
 }
@@ -96,5 +97,7 @@ float Config::Value::valueGet()
 template<>
 std::string Config::Value::valueGet()
 {
-  return m_data;
+  std::string tmp = m_data;
+  tmp.erase(std::remove(tmp.begin(), tmp.end(), '\"'), tmp.end());
+  return tmp;
 }

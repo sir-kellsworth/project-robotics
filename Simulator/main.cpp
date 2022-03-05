@@ -14,21 +14,21 @@ namespace
 {
   const char* CONFIG_FILE("config.txt");
 
-  const char* CONFIG_KEY_ARM_LENGTH("armLength");
-  const char* CONFIG_KEY_AVAILABLE("available");
-  const char* CONFIG_KEY_BASE_MOTOR("baseMotor");
-  const char* CONFIG_KEY_DEGREES_PER_SECOND("degreesPerSecond");
-  const char* CONFIG_KEY_ELBOW_MOTOR("elbowMotor");
-  const char* CONFIG_KEY_FORARM_LENGTH("forarmLength");
-  const char* CONFIG_KEY_IP_ADDRESS("ipAddress");
-  const char* CONFIG_KEY_HOME_POINT("homePoint");
-  const char* CONFIG_KEY_MAX_ANGLE("maxAngle");
-  const char* CONFIG_KEY_MIN_ANGLE("minAngle");
-  const char* CONFIG_KEY_REMOTE_CONTROLLER("remoteController");
-  const char* CONFIG_KEY_SHOULDER_MOTOR("shoulderMotor");
-  const char* CONFIG_KEY_SIM("sim");
-  const char* CONFIG_KEY_START_POINT("startPoint");
-  const char* CONFIG_KEY_PORT("port");
+  const char* CONFIG_KEY_ARM_LENGTH         ("armLength");
+  const char* CONFIG_KEY_AVAILABLE          ("available");
+  const char* CONFIG_KEY_BASE_MOTOR         ("baseMotor");
+  const char* CONFIG_KEY_DEGREES_PER_SECOND ("degreesPerSecond");
+  const char* CONFIG_KEY_ELBOW_MOTOR        ("elbowMotor");
+  const char* CONFIG_KEY_FORARM_LENGTH      ("forarmLength");
+  const char* CONFIG_KEY_IP_ADDRESS         ("ipAddress");
+  const char* CONFIG_KEY_HOME_POINT         ("homePoint");
+  const char* CONFIG_KEY_MAX_ANGLE          ("maxAngle");
+  const char* CONFIG_KEY_MIN_ANGLE          ("minAngle");
+  const char* CONFIG_KEY_REMOTE_CONTROLLER  ("remoteController");
+  const char* CONFIG_KEY_SHOULDER_MOTOR     ("shoulderMotor");
+  const char* CONFIG_KEY_SIM                ("sim");
+  const char* CONFIG_KEY_START_POINT        ("startPoint");
+  const char* CONFIG_KEY_PORT               ("port");
 }
 
 

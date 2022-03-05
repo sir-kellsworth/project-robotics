@@ -85,6 +85,8 @@ public:
 
     ~shared_ptr() { dec(); }
 
+    void reset(T* ptr) { dec(); pa = new auximpl<T, default_deleter<T> >(ptr, default_deleter<T>()); pt = ptr; }
+
     shared_ptr& operator=(const shared_ptr& s)
     {
         if(this!=&s)

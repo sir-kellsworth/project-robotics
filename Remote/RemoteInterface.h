@@ -3,7 +3,7 @@
 
 
 #include "ControlInterface/Device.h"
-#include "Network/SocketTcp.h"
+#include "Network/Socket.h"
 
 namespace Remote
 {
@@ -12,19 +12,21 @@ class RemoteInterface : public ControlInterface::Device
 {
 public:
   RemoteInterface(
-    const std::string& ip,
-    unsigned short port);
+    std::unique_ptr<Network::Socket>& socket);
 
   ~RemoteInterface();
 
   virtual void actionSend(
     std::shared_ptr<ActionMessage::Action> nextAction);
 
+  virtual shared_ptr<ActionMessage::Action> actionSendReply(
+    std::shared_ptr<ActionMessage::Action> nextAction);
+
   virtual void powerDownSend();
 
   virtual void powerUpSend();
 private:
-  Network::SocketTcp m_socket;
+  std::unique_ptr<Network::Socket> m_socket;
 };
 
 }

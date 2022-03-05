@@ -6,14 +6,21 @@
 #include <Arduino.h>
 
 
-//*****************************************************************
-RemoteInterface::RemoteInterface
-(
-  RoboticArm& arm
-)
-:m_arm(arm)
+namespace
 {
-  Serial.begin(115200);
+  const uint8_t BUFFER_MAX_SIZE(500);
+  const uint8_t NUM_END_BYTES(3);
+  const uint8_t MESSAGE_END[NUM_END_BYTES] = {0x44, 0x44, 0x44};
+}
+
+
+//*****************************************************************
+RemoteInterface::RemoteInterface()
+:m_buffer(BUFFER_MAX_SIZE),
+ m_actionAvailable(false),
+ m_bufferIndex(0)
+{
+
 }
 
 
@@ -27,19 +34,13 @@ RemoteInterface::~RemoteInterface()
 //*****************************************************************
 bool RemoteInterface::actionGet
 (
-  unique_ptr<ActionMessage::Action>& nextAction
+  shared_ptr<ActionMessage::Action>& nextAction
 )
 {
   bool success(false);
-  if(Serial.available() > 0)
+  if(m_actionAvailable)
   {
-    vector<uint8_t> data(20);
-    uint8_t i(0);
-    while(Serial.available() > 0)
-    {
-      data[i] = Serial.read();
-    }
-    nextAction = ActionMessage::ActionFactory::messageGenerate(data);
+    nextAction = m_nextAction;
     success = true;
   }
 
@@ -48,29 +49,62 @@ bool RemoteInterface::actionGet
 
 
 //*****************************************************************
-void RemoteInterface::moveHandle
+bool RemoteInterface::endFound()
+{
+  bool success(false);
+  if(m_bufferIndex > NUM_END_BYTES)
+  {
+    uint8_t bufferStartIndex = m_bufferIndex - NUM_END_BYTES;
+    for(int i = 0; i < NUM_END_BYTES; ++i)
+    {
+      if(m_buffer[bufferStartIndex + i] != MESSAGE_END[i])
+      {
+        return false;
+      }
+    }
+    success = true;
+  }
+
+  return success;
+}
+
+
+//*****************************************************************
+void RemoteInterface::send
 (
-  unique_ptr<ActionMessage::MoveAction> moveAction
+  const shared_ptr<ActionMessage::Action>& response
 )
 {
-  
+  vector<uint8_t> data;
+  unique_ptr<ActionMessage::ActionEncoder> encoder
+    = ActionMessage::ActionFactory::encoderGet(response);
+  encoder->actionEncode(data);
+
+  Serial.write(data.data(), data.size());
+  Serial.write(MESSAGE_END, NUM_END_BYTES);
+  Serial.flush();
 }
 
 
 //*****************************************************************
 void RemoteInterface::step()
 {
-  unique_ptr<ActionMessage::Action> nextAction;
-
-  if(actionGet(nextAction))
+  if(Serial.available() > 0)
   {
-    if(nextAction->messageTypeGet() == ActionMessage::MoveAction::TYPE_ID)
+    while(Serial.available() > 0)
     {
-      unique_ptr<ActionMessage::MoveAction> move =
-        unique_ptr<ActionMessage::MoveAction>(
-          (ActionMessage::MoveAction*)nextAction.get());
+      m_buffer[m_bufferIndex] = Serial.read();
+      ++m_bufferIndex;
+    }
 
-      moveHandle(move);
+    if(endFound())
+    {
+      m_buffer.resize(m_buffer.size() - NUM_END_BYTES);
+      m_nextAction.reset(
+        ActionMessage::ActionFactory::messageGenerate(m_buffer).release());
+      m_actionAvailable = true;
+      memset((volatile void *)m_buffer.data(), 0, m_bufferIndex);
+      m_bufferIndex = 0;
     }
   }
 }
