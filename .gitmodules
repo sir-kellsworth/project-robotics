@@ -1,3 +1,0 @@
-[submodule "vendor/libfixmath"]
-	path = vendor/libfixmath/source
-	url = https://github.com/PetteriAimonen/libfixmath.git
