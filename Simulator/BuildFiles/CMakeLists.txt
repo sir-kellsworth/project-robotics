@@ -13,6 +13,7 @@ set(UTILS_DIR ${BASE_DIR}/Utils)
 set(PATHING_DIR ${BASE_DIR}/Pathing)
 set(REMOTE_DIR ${BASE_DIR}/Remote)
 set(SIMULATOR_DIR ${BASE_DIR}/Simulator)
+set(VENDOR_DIR ${BASE_DIR}/vendor)
 
 set(SOURCE_ACTION_MESSAGE
   ${ACTION_MESSAGE_DIR}/Action.cpp
@@ -139,10 +140,12 @@ find_package(Threads REQUIRED)
 
 include_directories(
   "${BASE_DIR}/"
+  "${VENDOR_DIR}/libfixmath/api/"
 )
 
 add_executable(RoboticSim ${CMAKE_CURRENT_LIST_DIR}/../main.cpp ${SOURCE_ALL})
 target_link_libraries(RoboticSim Threads::Threads)
+target_link_libraries(RoboticSim ${VENDOR_DIR}/libfixmath/lib/liblibfixmath.a)
 
 
 add_custom_target(

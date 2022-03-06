@@ -2,11 +2,6 @@
 
 #include <math.h>
 
-namespace
-{
-    const float epsilon(1e-6);
-}
-
 
 //*****************************************************************************
 void Utils::anglesCalculate
@@ -14,8 +9,8 @@ void Utils::anglesCalculate
   float x,
   float y,
   float z,
-  uint32_t armLength,
-  uint32_t forarmLength,
+  uint16_t armLength,
+  uint16_t forarmLength,
   float& baseAngle,
   float& shoulderAngle,
   float& elbowAngle
@@ -28,6 +23,29 @@ void Utils::anglesCalculate
   float D2 = lawOfCosines(c, armLength, forarmLength);
   shoulderAngle = (D1 + D2) * RADIANS_TO_DEGREES;
   elbowAngle = lawOfCosines(armLength, forarmLength, c) * RADIANS_TO_DEGREES;
+}
+
+
+//*****************************************************************************
+void Utils::anglesCalculate
+(
+  Fix16 x,
+  Fix16 y,
+  Fix16 z,
+  uint16_t armLength,
+  uint16_t forarmLength,
+  Fix16& baseAngle,
+  Fix16& shoulderAngle,
+  Fix16& elbowAngle
+)
+{
+  baseAngle = y.atan2(x + epsilon_fix) * RADIANS_TO_DEGREES;
+  Fix16 xy = (squared(x) + squared(y)).sqrt();
+  Fix16 c = (squared(xy) + squared(z)).sqrt();
+  Fix16 D1 = z.atan2(xy + epsilon_fix);
+  Fix16 D2 = lawOfCosines(c, armLength, forarmLength);
+  shoulderAngle = (D1 + D2) * RADIANS_TO_DEGREES;
+  elbowAngle = lawOfCosines(Fix16(armLength), Fix16(forarmLength), c) * RADIANS_TO_DEGREES;
 }
 
 
@@ -56,14 +74,27 @@ float Utils::lawOfCosines
 }
 
 
+//***************************************************************************
+Fix16 Utils::lawOfCosines
+(
+  Fix16 a,
+  Fix16 b,
+  Fix16 c
+)
+{
+  return ((squared(a) + squared(b) - squared(c)).acos() /
+    (a * b * 2) + epsilon_fix);
+}
+
+
 //*****************************************************************************
 void Utils::positionCalculate
 (
   float baseAngle,
   float shoulderAngle,
   float elbowAngle,
-  uint32_t armLength,
-  uint32_t forarmLength,
+  uint16_t armLength,
+  uint16_t forarmLength,
   float& nextX,
   float& nextY,
   float& nextZ
@@ -92,7 +123,17 @@ void Utils::positionCalculate
 //***************************************************************************
 float Utils::squared
 (
-  float a
+  const float& a
+)
+{
+  return a * a;
+}
+
+
+//***************************************************************************
+Fix16 Utils::squared
+(
+  const Fix16& a
 )
 {
   return a * a;
