@@ -12,7 +12,6 @@ set(NETWORK_DIR ${BASE_DIR}/Network)
 set(UTILS_DIR ${BASE_DIR}/Utils)
 set(PATHING_DIR ${BASE_DIR}/Pathing)
 set(REMOTE_DIR ${BASE_DIR}/Remote)
-set(SIMULATOR_DIR ${BASE_DIR}/Simulator)
 
 set(SOURCE_ACTION_MESSAGE
   ${ACTION_MESSAGE_DIR}/Action.cpp
@@ -96,8 +95,6 @@ set(SOURCE_NETWORK
 )
 
 set(SOURCE_UTILS
-  ${UTILS_DIR}/TrigEquations.cpp
-  ${UTILS_DIR}/TrigEquations.h
   ${UTILS_DIR}/SafeQueue.h
   ${UTILS_DIR}/StringUtils.cpp
   ${UTILS_DIR}/StringUtils.h
@@ -117,13 +114,6 @@ set(SOURCE_REMOTE
   ${REMOTE_DIR}/RemoteInterface.h
 )
 
-set(SOURCE_SIMULATOR
-  ${SIMULATOR_DIR}/SimulatorArm.cpp
-  ${SIMULATOR_DIR}/SimulatorArm.h
-  ${SIMULATOR_DIR}/SimulatorMotor.cpp
-  ${SIMULATOR_DIR}/SimulatorMotor.h
-)
-
 set(SOURCE_ALL
   ${SOURCE_ACTION_MESSAGE}
   ${SOURCE_CONFIG}
@@ -132,7 +122,6 @@ set(SOURCE_ALL
   ${SOURCE_UTILS}
   ${SOURCE_PATHING}
   ${SOURCE_REMOTE}
-  ${SOURCE_SIMULATOR}
 )
 
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)

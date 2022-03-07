@@ -10,27 +10,27 @@ class MoveAction : public ActionMessage::Action
 {
 public:
   MoveAction(
-	float x,
-	float y,
-	float z);
+	uint16_t x,
+	uint16_t y,
+	uint16_t z);
 
   virtual ~MoveAction();
+  
+uint16_t xGet();
 
-float xGet();
+uint16_t yGet();
 
-float yGet();
+uint16_t zGet();
 
-float zGet();
-
-
+  
 void xSet(
-	const float& x);
+	const uint16_t& x);
 
 void ySet(
-	const float& y);
+	const uint16_t& y);
 
 void zSet(
-	const float& z);
+	const uint16_t& z);
 
 
   virtual uint8_t messageTypeGet();
@@ -42,9 +42,9 @@ void zSet(
 	static const uint8_t SIZE_PARAM_2;
 
 private:
-	float m_x;
-	float m_y;
-	float m_z;
+	uint16_t m_x;
+	uint16_t m_y;
+	uint16_t m_z;
 
 };
 

@@ -2,7 +2,7 @@ ClassName, numParams, paramType, paramNumBytes, Param1, Param2,...
 FailedAction, 0
 HomeAction, 0
 KillAction, 0
-MoveAction, 3, float, x, float, y, float, z
+MoveAction, 3, uint16_t, x, uint16_t, y, uint16_t, z
 NoAction, 0
 PowerDownAction, 0
 PowerUpAction, 0
