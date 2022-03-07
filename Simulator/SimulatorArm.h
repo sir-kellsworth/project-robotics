@@ -4,6 +4,7 @@
 #include "ActionMessage/MoveAction.h"
 #include "ControlInterface/Device.h"
 #include "Utils/SafeQueue.h"
+#include "Utils/Semaphore.h"
 #include "Simulator/SimulatorMotor.h"
 #include "Pathing/Point.h"
 
@@ -66,6 +67,8 @@ private:
   Utils::SafeQueue<std::shared_ptr<ActionMessage::Action>> m_queue;
   Pathing::Point m_home;
   Pathing::Point m_currentPosition;
+  Utils::Semaphore m_actionWaitSemaphore;
+  std::shared_ptr<ActionMessage::Action> m_reply;
 };
 
 }

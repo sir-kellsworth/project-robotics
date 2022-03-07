@@ -98,6 +98,8 @@ set(SOURCE_UTILS
   ${UTILS_DIR}/TrigEquations.cpp
   ${UTILS_DIR}/TrigEquations.h
   ${UTILS_DIR}/SafeQueue.h
+  ${UTILS_DIR}/Semaphore.cpp
+  ${UTILS_DIR}/Semaphore.h
   ${UTILS_DIR}/StringUtils.cpp
   ${UTILS_DIR}/StringUtils.h
 )

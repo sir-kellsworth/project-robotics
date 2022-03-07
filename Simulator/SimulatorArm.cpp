@@ -4,6 +4,7 @@
 #include "ActionMessage/KillAction.h"
 #include "ActionMessage/PowerDownAction.h"
 #include "ActionMessage/PowerUpAction.h"
+#include "ActionMessage/SuccessAction.h"
 #include "Utils/TrigEquations.h"
 
 
@@ -66,10 +67,15 @@ void Simulator::SimulatorArm::actionSend
 //This function should not be used
 shared_ptr<ActionMessage::Action> Simulator::SimulatorArm::actionSendReply
 (
-  shared_ptr<ActionMessage::Action> action
+  shared_ptr<ActionMessage::Action> nextAction
 )
 {
-  return shared_ptr<ActionMessage::Action>();
+  m_queue.push(nextAction);
+
+  //wait for action to finish
+  m_actionWaitSemaphore.wait();
+
+  return m_reply;
 }
 
 
@@ -94,6 +100,8 @@ void Simulator::SimulatorArm::backgroundHandle()
       std::shared_ptr<ActionMessage::MoveAction> move =
         std::dynamic_pointer_cast<ActionMessage::MoveAction>(action);
       moveHandle(move);
+
+      m_reply = std::shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
     }
     else if(action->messageTypeGet() == ActionMessage::HomeAction::TYPE_ID)
     {
@@ -109,15 +117,23 @@ void Simulator::SimulatorArm::backgroundHandle()
     else if(action->messageTypeGet() == ActionMessage::PowerDownAction::TYPE_ID)
     {
       powerDown();
+
+      m_reply = std::shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
     }
     else if(action->messageTypeGet() == ActionMessage::PowerUpAction::TYPE_ID)
     {
       powerUp();
+
+      m_reply = std::shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
     }
     else if(action->messageTypeGet() == ActionMessage::KillAction::TYPE_ID)
     {
       m_running = false;
+
+      m_reply = std::shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
     }
+
+    m_actionWaitSemaphore.signal();
   }
 }
 
