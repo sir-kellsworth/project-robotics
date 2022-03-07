@@ -27,7 +27,7 @@ def paramsIndexSourceGenerate(params, namespace):
                 nextIndex = nextIndex + str(startIndex)
             else:
                 nextIndex = nextIndex + "INDEX_PARAM_" + str(index-1) + " + "
-                nextIndex = nextIndex + "sizeof(" + namespace + "::SIZE_PARAM_" + str(index) + ")"
+                nextIndex = nextIndex + namespace + "::SIZE_PARAM_" + str(index)
 
             nextIndex = nextIndex + ");\n"
             paramsIndex = paramsIndex + nextIndex

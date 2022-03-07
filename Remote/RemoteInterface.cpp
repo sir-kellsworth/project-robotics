@@ -62,6 +62,12 @@ shared_ptr<ActionMessage::Action> Remote::RemoteInterface::actionSendReply
     std::vector<uint8_t> data;
     encoder->actionEncode(data);
 
+    for(uint8_t& next : data)
+    {
+      std::cout << (int)next << " ";
+    }
+    std::cout << std::endl;
+
     m_socket->send(data);
 
     data.resize(MAX_SIZE);
