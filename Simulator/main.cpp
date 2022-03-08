@@ -81,8 +81,8 @@ std::shared_ptr<Remote::RemoteController> simulatorArmMake
       elbowMotorMaxAngle,
       degreesPerSecond));
 
-  std::unique_ptr<ControlInterface::Device> sim = std::unique_ptr<Simulator::SimulatorArm>(
-    new Simulator::SimulatorArm(
+  std::unique_ptr<ControlInterface::Device> sim = std::unique_ptr<Simulator::SimulatorArm<float>>(
+    new Simulator::SimulatorArm<float>(
       home,
       startPoint,
       armLength_mm,

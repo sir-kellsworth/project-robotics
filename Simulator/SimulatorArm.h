@@ -14,6 +14,7 @@
 namespace Simulator
 {
 
+template <typename T>
 class SimulatorArm : public ControlInterface::Device
 {
 public:

@@ -21,7 +21,8 @@ namespace
 
 
 //*****************************************************************************
-Simulator::SimulatorArm::SimulatorArm
+template<typename T>
+Simulator::SimulatorArm<T>::SimulatorArm
 (
   Pathing::Point home,
   Pathing::Point start,
@@ -37,7 +38,7 @@ Simulator::SimulatorArm::SimulatorArm
  m_armLength(armLength),
  m_forarmLength(forarmLength),
  m_running(true),
- m_backgroundThread(&Simulator::SimulatorArm::backgroundHandle, this),
+ m_backgroundThread(&Simulator::SimulatorArm<T>::backgroundHandle, this),
  m_home(home),
  m_currentPosition(start)
 {
@@ -46,7 +47,8 @@ Simulator::SimulatorArm::SimulatorArm
 
 
 //*****************************************************************************
-Simulator::SimulatorArm::~SimulatorArm()
+template<typename T>
+Simulator::SimulatorArm<T>::~SimulatorArm()
 {
   m_queue.push(std::shared_ptr<ActionMessage::KillAction>(new ActionMessage::KillAction));
   m_backgroundThread.join();
@@ -54,7 +56,9 @@ Simulator::SimulatorArm::~SimulatorArm()
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::actionSend
+//This function should not be used
+template<typename T>
+void Simulator::SimulatorArm<T>::actionSend
 (
   std::shared_ptr<ActionMessage::Action> nextAction
 )
@@ -64,8 +68,8 @@ void Simulator::SimulatorArm::actionSend
 
 
 //*****************************************************************************
-//This function should not be used
-shared_ptr<ActionMessage::Action> Simulator::SimulatorArm::actionSendReply
+template<typename T>
+shared_ptr<ActionMessage::Action> Simulator::SimulatorArm<T>::actionSendReply
 (
   shared_ptr<ActionMessage::Action> nextAction
 )
@@ -80,7 +84,8 @@ shared_ptr<ActionMessage::Action> Simulator::SimulatorArm::actionSendReply
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::anglesPrint()
+template<typename T>
+void Simulator::SimulatorArm<T>::anglesPrint()
 {
   std::cout << "angles: " << std::endl;
   std::cout << "\tbaseAngle: " << m_baseMotor->angleGet() << std::endl;
@@ -90,7 +95,8 @@ void Simulator::SimulatorArm::anglesPrint()
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::backgroundHandle()
+template<typename T>
+void Simulator::SimulatorArm<T>::backgroundHandle()
 {
   while(m_running)
   {
@@ -139,7 +145,8 @@ void Simulator::SimulatorArm::backgroundHandle()
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::moveHandle
+template<typename T>
+void Simulator::SimulatorArm<T>::moveHandle
 (
   std::shared_ptr<ActionMessage::MoveAction> moveAction
 )
@@ -165,7 +172,8 @@ void Simulator::SimulatorArm::moveHandle
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::moveTo
+template<typename T>
+void Simulator::SimulatorArm<T>::moveTo
 (
   Pathing::Point goal
 )
@@ -200,9 +208,9 @@ void Simulator::SimulatorArm::moveTo
 
   //if any of these are invalid, then the angle is outside of the
   //physical bounds of the arm. Set in the config file
-  bool validAngle = m_baseMotor->angleSet(baseAngle) &&
-    m_shoulderMotor->angleSet(shoulderAngle) &&
-    m_elbowMotor->angleSet(elbowAngle);
+  bool validAngle = m_baseMotor->angleSet(baseAngle)
+    && m_shoulderMotor->angleSet(shoulderAngle)
+    && m_elbowMotor->angleSet(elbowAngle);
 
   if(validAngle)
   {
@@ -262,7 +270,8 @@ void Simulator::SimulatorArm::moveTo
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::positionPrint()
+template<typename T>
+void Simulator::SimulatorArm<T>::positionPrint()
 {
   std::cout << "position: " << std::endl;
   std::cout << "\tx: " << m_currentPosition.xGet() << std::endl;
@@ -272,7 +281,8 @@ void Simulator::SimulatorArm::positionPrint()
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::powerDown()
+template<typename T>
+void Simulator::SimulatorArm<T>::powerDown()
 {
   m_baseMotor->powerDown();
   m_shoulderMotor->powerDown();
@@ -281,7 +291,8 @@ void Simulator::SimulatorArm::powerDown()
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::powerUp()
+template<typename T>
+void Simulator::SimulatorArm<T>::powerUp()
 {
   m_baseMotor->powerUp();
   m_shoulderMotor->powerUp();
@@ -290,14 +301,21 @@ void Simulator::SimulatorArm::powerUp()
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::powerDownSend()
+template<typename T>
+void Simulator::SimulatorArm<T>::powerDownSend()
 {
   m_queue.push(std::shared_ptr<ActionMessage::PowerDownAction>(new ActionMessage::PowerDownAction));
 }
 
 
 //*****************************************************************************
-void Simulator::SimulatorArm::powerUpSend()
+template<typename T>
+void Simulator::SimulatorArm<T>::powerUpSend()
 {
   m_queue.push(std::shared_ptr<ActionMessage::PowerUpAction>(new ActionMessage::PowerUpAction));
 }
+
+
+// forward declaration trick to allow separate template h/cpp files
+template class Simulator::SimulatorArm<float>;
+template class Simulator::SimulatorArm<Fix16>;
