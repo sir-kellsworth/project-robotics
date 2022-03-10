@@ -1,10 +1,6 @@
 #ifndef SIMULATOR_SIMULATORARM_H
 #define SIMULATOR_SIMULATORARM_H
 
-#include "ActionMessage/MoveAction.h"
-#include "ControlInterface/Device.h"
-#include "Utils/SafeQueue.h"
-#include "Utils/Semaphore.h"
 #include "Simulator/SimulatorMotor.h"
 #include "Pathing/Point.h"
 
@@ -15,7 +11,7 @@ namespace Simulator
 {
 
 template <typename T>
-class SimulatorArm : public ControlInterface::Device
+class SimulatorArm
 {
 public:
   SimulatorArm(
@@ -29,26 +25,11 @@ public:
 
   virtual ~SimulatorArm();
 
-  virtual void actionSend(
-    std::shared_ptr<ActionMessage::Action> nextAction);
-
-  virtual shared_ptr<ActionMessage::Action> actionSendReply(
-    shared_ptr<ActionMessage::Action> action);
-
-  virtual void powerDownSend();
-
-  virtual void powerUpSend();
-private:
   void anglesPrint();
-
-  void backgroundHandle();
 
   void home();
 
-  void moveHandle(
-    std::shared_ptr<ActionMessage::MoveAction> moveAction);
-
-    void moveTo(
+    const Pathing::Point& moveTo(
       Pathing::Point goal);
 
   void positionPrint();
@@ -57,19 +38,15 @@ private:
 
   void powerUp();
 
+private:
   std::shared_ptr<Simulator::SimulatorMotor> m_baseMotor;
   std::shared_ptr<Simulator::SimulatorMotor> m_shoulderMotor;
   std::shared_ptr<Simulator::SimulatorMotor> m_elbowMotor;
 
   uint32_t m_armLength;
   uint32_t m_forarmLength;
-  bool m_running;
-  std::thread m_backgroundThread;
-  Utils::SafeQueue<std::shared_ptr<ActionMessage::Action>> m_queue;
   Pathing::Point m_home;
   Pathing::Point m_currentPosition;
-  Utils::Semaphore m_actionWaitSemaphore;
-  std::shared_ptr<ActionMessage::Action> m_reply;
 };
 
 }

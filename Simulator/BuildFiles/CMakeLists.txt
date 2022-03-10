@@ -119,6 +119,8 @@ set(SOURCE_REMOTE
 )
 
 set(SOURCE_SIMULATOR
+  ${SIMULATOR_DIR}/SimulatorController.cpp
+  ${SIMULATOR_DIR}/SimulatorController.h
   ${SIMULATOR_DIR}/SimulatorArm.cpp
   ${SIMULATOR_DIR}/SimulatorArm.h
   ${SIMULATOR_DIR}/SimulatorMotor.cpp

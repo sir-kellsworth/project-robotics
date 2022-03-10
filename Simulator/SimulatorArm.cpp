@@ -37,8 +37,6 @@ Simulator::SimulatorArm<T>::SimulatorArm
  m_elbowMotor(elbowMotor),
  m_armLength(armLength),
  m_forarmLength(forarmLength),
- m_running(true),
- m_backgroundThread(&Simulator::SimulatorArm<T>::backgroundHandle, this),
  m_home(home),
  m_currentPosition(start)
 {
@@ -50,36 +48,7 @@ Simulator::SimulatorArm<T>::SimulatorArm
 template<typename T>
 Simulator::SimulatorArm<T>::~SimulatorArm()
 {
-  m_queue.push(std::shared_ptr<ActionMessage::KillAction>(new ActionMessage::KillAction));
-  m_backgroundThread.join();
-}
 
-
-//*****************************************************************************
-//This function should not be used
-template<typename T>
-void Simulator::SimulatorArm<T>::actionSend
-(
-  std::shared_ptr<ActionMessage::Action> nextAction
-)
-{
-  m_queue.push(nextAction);
-}
-
-
-//*****************************************************************************
-template<typename T>
-shared_ptr<ActionMessage::Action> Simulator::SimulatorArm<T>::actionSendReply
-(
-  shared_ptr<ActionMessage::Action> nextAction
-)
-{
-  m_queue.push(nextAction);
-
-  //wait for action to finish
-  m_actionWaitSemaphore.wait();
-
-  return m_reply;
 }
 
 
@@ -96,84 +65,15 @@ void Simulator::SimulatorArm<T>::anglesPrint()
 
 //*****************************************************************************
 template<typename T>
-void Simulator::SimulatorArm<T>::backgroundHandle()
+void Simulator::SimulatorArm<T>::home()
 {
-  while(m_running)
-  {
-    std::shared_ptr<ActionMessage::Action> action = m_queue.pop();
-    if(action->messageTypeGet() == ActionMessage::MoveAction::TYPE_ID)
-    {
-      std::shared_ptr<ActionMessage::MoveAction> move =
-        std::dynamic_pointer_cast<ActionMessage::MoveAction>(action);
-      moveHandle(move);
-
-      m_reply = std::shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
-    }
-    else if(action->messageTypeGet() == ActionMessage::HomeAction::TYPE_ID)
-    {
-      std::shared_ptr<ActionMessage::MoveAction> home =
-        std::shared_ptr<ActionMessage::MoveAction>(
-          new ActionMessage::MoveAction(
-            m_home.xGet(),
-            m_home.yGet(),
-            m_home.zGet()));
-
-      moveHandle(home);
-    }
-    else if(action->messageTypeGet() == ActionMessage::PowerDownAction::TYPE_ID)
-    {
-      powerDown();
-
-      m_reply = std::shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
-    }
-    else if(action->messageTypeGet() == ActionMessage::PowerUpAction::TYPE_ID)
-    {
-      powerUp();
-
-      m_reply = std::shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
-    }
-    else if(action->messageTypeGet() == ActionMessage::KillAction::TYPE_ID)
-    {
-      m_running = false;
-
-      m_reply = std::shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
-    }
-
-    m_actionWaitSemaphore.signal();
-  }
+  moveTo(m_home);
 }
 
 
 //*****************************************************************************
 template<typename T>
-void Simulator::SimulatorArm<T>::moveHandle
-(
-  std::shared_ptr<ActionMessage::MoveAction> moveAction
-)
-{
-  Pathing::Point goalPoint(
-    moveAction->xGet(),
-    moveAction->yGet(),
-    moveAction->zGet());
-  std::cout << "moving to goal" << std::endl;
-
-  /*Pathing::Path path = Pathing::straightPathGenerate(
-    m_currentPosition,
-    goalPoint);//,
-    //NUM_POINTS_DEFAULT);*/
-
-  /*for(const Pathing::Point& next : path)
-  {
-    std::cout << "next: " << next.xGet() << " " << next.yGet() << " " << next.zGet() << std::endl;
-    moveTo(next);
-  }*/
-  moveTo(goalPoint);
-}
-
-
-//*****************************************************************************
-template<typename T>
-void Simulator::SimulatorArm<T>::moveTo
+const Pathing::Point& Simulator::SimulatorArm<T>::moveTo
 (
   Pathing::Point goal
 )
@@ -266,6 +166,8 @@ void Simulator::SimulatorArm<T>::moveTo
     std::cout << "Angle outside of valid area" << std::endl;
     std::cout << baseAngle << " " << shoulderAngle << " " << elbowAngle << std::endl;
   }
+
+  return m_currentPosition;
 }
 
 
@@ -297,22 +199,6 @@ void Simulator::SimulatorArm<T>::powerUp()
   m_baseMotor->powerUp();
   m_shoulderMotor->powerUp();
   m_elbowMotor->powerUp();
-}
-
-
-//*****************************************************************************
-template<typename T>
-void Simulator::SimulatorArm<T>::powerDownSend()
-{
-  m_queue.push(std::shared_ptr<ActionMessage::PowerDownAction>(new ActionMessage::PowerDownAction));
-}
-
-
-//*****************************************************************************
-template<typename T>
-void Simulator::SimulatorArm<T>::powerUpSend()
-{
-  m_queue.push(std::shared_ptr<ActionMessage::PowerUpAction>(new ActionMessage::PowerUpAction));
 }
 
 

@@ -1,5 +1,6 @@
 #include "Config/Config.h"
 #include "Pathing/Point.h"
+#include "Simulator/SimulatorController.h"
 #include "Simulator/SimulatorArm.h"
 #include "Utils/TrigEquations.h"
 #include "Utils/StringUtils.h"
@@ -81,8 +82,8 @@ std::shared_ptr<Remote::RemoteController> simulatorArmMake
       elbowMotorMaxAngle,
       degreesPerSecond));
 
-  std::unique_ptr<ControlInterface::Device> sim = std::unique_ptr<Simulator::SimulatorArm<float>>(
-    new Simulator::SimulatorArm<float>(
+  std::unique_ptr<ControlInterface::Device> sim(
+    new Simulator::SimulatorController(
       home,
       startPoint,
       armLength_mm,

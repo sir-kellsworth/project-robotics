@@ -16,6 +16,8 @@ public:
 
   ~Point();
 
+  bool operator==(const Pathing::Point& p);
+
   bool valid();
 
   const float& xGet() const;
