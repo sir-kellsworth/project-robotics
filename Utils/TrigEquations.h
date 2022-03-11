@@ -1,14 +1,14 @@
 #ifndef UTILS_TRIGEQUATIONS_H
 #define UTILS_TRIGEQUATIONS_H
 
-#include "fixmath.h"
-
 #ifndef __linux__
 #include <Arduino.h>
 #endif
 
 #include <math.h>
 #include <stdint.h>
+
+class Fix16;
 
 namespace Utils
 {
@@ -79,8 +79,6 @@ void stepperPositionCalculate(
   const static float DEGREES_TO_RADIANS (PI / 180);
   const static uint8_t NO_MOVEMENT      (-1);
   const static float RADIANS_TO_DEGREES (180 / PI);
-  const static float epsilon            (1e-6);
-  const static Fix16 epsilon_fix        (1e-6);
 }
 
 #endif

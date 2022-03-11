@@ -1,6 +1,14 @@
 #include "Utils/TrigEquations.h"
 
 #include <math.h>
+#include "fixmath.h"
+
+
+namespace
+{
+  const float epsilon     (1e-6);
+  const Fix16 epsilon_fix (1e-6);
+}
 
 
 //*****************************************************************************
