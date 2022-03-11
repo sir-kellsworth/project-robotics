@@ -156,8 +156,7 @@ const Pathing::Point& Simulator::SimulatorArm<T>::moveTo
         anglesPrint();
         positionPrint();
 
-        usleep(1000);
-        //usleep(SLEEP_TIME_US);
+        usleep(SLEEP_TIME_US);
       }
     }
   }

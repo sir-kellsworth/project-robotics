@@ -47,7 +47,6 @@ void Remote::RemoteInterface::actionSend
 }
 
 
-#include <iostream>
 //*****************************************************************************
 shared_ptr<ActionMessage::Action> Remote::RemoteInterface::actionSendReply
 (
@@ -62,22 +61,10 @@ shared_ptr<ActionMessage::Action> Remote::RemoteInterface::actionSendReply
     std::vector<uint8_t> data;
     encoder->actionEncode(data);
 
-    for(uint8_t& next : data)
-    {
-      std::cout << (int)next << " ";
-    }
-    std::cout << std::endl;
-
     m_socket->send(data);
 
     data.resize(MAX_SIZE);
     m_socket->read(data);
-    std::cout << "got data: ";
-    for(uint8_t& next: data)
-    {
-      std::cout << (char)next;
-    }
-    std::cout << std::endl;
     reply = ActionMessage::ActionFactory::messageGenerate(data);
   }
 

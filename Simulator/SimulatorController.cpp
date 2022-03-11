@@ -8,6 +8,24 @@
 #include "ActionMessage/PowerUpAction.h"
 #include "ActionMessage/SuccessAction.h"
 
+#include <iostream>
+
+
+namespace
+{
+    const float ERROR_MARGIN(0.1);
+
+    bool within
+    (
+      float a,
+      float b,
+      float margin
+    )
+    {
+      return std::abs(a - b) < margin;
+    }
+};
+
 
 //*****************************************************************************
 Simulator::SimulatorController::SimulatorController
@@ -49,6 +67,19 @@ Simulator::SimulatorController::~SimulatorController()
 
 
 //*****************************************************************************
+bool Simulator::SimulatorController::about
+(
+  const Pathing::Point& a,
+  const Pathing::Point& b
+)
+{
+  return within(a.xGet(), b.xGet(), ERROR_MARGIN)
+    && within(a.yGet(), b.yGet(), ERROR_MARGIN)
+    && within(a.zGet(), b.zGet(), ERROR_MARGIN);
+}
+
+
+//*****************************************************************************
 void Simulator::SimulatorController::actionSend
 (
   std::shared_ptr<ActionMessage::Action> nextAction
@@ -77,7 +108,15 @@ shared_ptr<ActionMessage::Action> Simulator::SimulatorController::actionSendRepl
     Pathing::Point masterPosition = m_masterSimulator.moveTo(goalPoint);
     Pathing::Point testerPosition = m_testerSimulator.moveTo(goalPoint);
 
-    if(testerPosition == masterPosition)
+    std::cout << "float final value: " << std::endl;
+    std::cout << "\tx: " << masterPosition.xGet() << std::endl;
+    std::cout << "\ty: " << masterPosition.yGet() << std::endl;
+    std::cout << "\tz: "  << masterPosition.zGet() << std::endl;
+    std::cout << "fixed final value: " << std::endl;
+    std::cout << "\tx: " << testerPosition.xGet() << std::endl;
+    std::cout << "\ty: " << testerPosition.yGet() << std::endl;
+    std::cout << "\tz: "  << testerPosition.zGet() << std::endl;
+    if(about(testerPosition, masterPosition))
     {
       reply = shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
     }

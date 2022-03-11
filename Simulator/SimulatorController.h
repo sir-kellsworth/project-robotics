@@ -25,6 +25,10 @@ public:
 
   virtual ~SimulatorController();
 
+  bool about(
+    const Pathing::Point& a,
+    const Pathing::Point& b);
+
   virtual void actionSend(
     std::shared_ptr<ActionMessage::Action> nextAction);
 
