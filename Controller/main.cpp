@@ -1,5 +1,5 @@
 #include "Config/Config.h"
-#include "ControlInterface/CommandLineInterface.h"
+#include "Controller/CommandLineInterface.h"
 #include "Network/SocketSerial.h"
 #include "Network/SocketTcp.h"
 #include "Remote/RemoteInterface.h"
@@ -39,7 +39,7 @@ int main
 )
 {
   Config::ConfigMap map = Config::configGet(CONFIG_FILE);
-  ControlInterface::CommandLineInterface interface;
+  Controller::CommandLineInterface interface;
   std::unique_ptr<Network::Socket> socket;
   if(map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_INTERFACE_TYPE].valueGet<std::string>() == CONFIG_KEY_TCP_INTERFACE)
   {

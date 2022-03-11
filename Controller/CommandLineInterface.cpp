@@ -1,4 +1,4 @@
-#include "ControlInterface/CommandLineInterface.h"
+#include "Controller/CommandLineInterface.h"
 
 #include "ActionMessage/KillAction.h"
 #include "ActionMessage/HomeAction.h"
@@ -44,7 +44,7 @@ namespace
 }
 
 //*****************************************************************************
-ControlInterface::CommandLineInterface::CommandLineInterface()
+Controller::CommandLineInterface::CommandLineInterface()
 :m_running(true)
 {
 
@@ -52,14 +52,14 @@ ControlInterface::CommandLineInterface::CommandLineInterface()
 
 
 //*****************************************************************************
-ControlInterface::CommandLineInterface::~CommandLineInterface()
+Controller::CommandLineInterface::~CommandLineInterface()
 {
 
 }
 
 
 //*****************************************************************************
-void ControlInterface::CommandLineInterface::commandParse
+void Controller::CommandLineInterface::commandParse
 (
   const std::string& commandString
 )
@@ -126,7 +126,7 @@ void ControlInterface::CommandLineInterface::commandParse
 
 
 //*****************************************************************************
-void ControlInterface::CommandLineInterface::deviceSet
+void Controller::CommandLineInterface::deviceSet
 (
   std::shared_ptr<ControlInterface::Device> device
 )
@@ -136,7 +136,7 @@ void ControlInterface::CommandLineInterface::deviceSet
 
 
 //*****************************************************************************
-void ControlInterface::CommandLineInterface::run()
+void Controller::CommandLineInterface::run()
 {
   usagePrint();
   while(m_running)
@@ -150,7 +150,7 @@ void ControlInterface::CommandLineInterface::run()
 
 
 //*****************************************************************************
-void ControlInterface::CommandLineInterface::usagePrint()
+void Controller::CommandLineInterface::usagePrint()
 {
   std::cout << "commands:" << std::endl;
   std::cout << "\thome" << std::endl;

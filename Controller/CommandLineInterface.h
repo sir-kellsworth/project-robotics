@@ -1,11 +1,11 @@
-#ifndef CONTROLINTERFACE_COMMANDLINEINTERFACE_H
-#define CONTROLINTERFACE_COMMANDLINEINTERFACE_H
+#ifndef CONTROLLER_COMMANDLINEINTERFACE_H
+#define CONTROLLER_COMMANDLINEINTERFACE_H
 
 #include "ControlInterface/Device.h"
 
 #include <vector>
 
-namespace ControlInterface
+namespace Controller
 {
 
 class CommandLineInterface
