@@ -9,11 +9,14 @@ pushd $VENDOR_DIR
 #now build vendor code
 mkdir -p libfixmath/build
 mkdir -p libfixmath/lib
+mkdir -p libfixmath/api
+mkdir -p libfixmath/api/fixmath
 pushd libfixmath/build
 
-cmake ..
+cmake ../source/
 make
-mv liblibfixmath.a ../lib/
+cp liblibfixmath.a ../lib/
+cp ../source/libfixmath/* ../api/
 
 popd
 

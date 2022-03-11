@@ -228,6 +228,8 @@ def configCsvParse(file):
     return classes
 
 
+if len(sys.argv) != 2:
+    print("usage: ./actionsGenerate.py actionClasses.csvFile")
 
 file = sys.argv[1]
 dir = os.path.dirname(sys.argv[0]) + "/../ActionMessage/"

@@ -46,11 +46,20 @@ void Remote::RemoteController::backgroundHandle()
     std::vector<uint8_t> data(MAX_DATA_SIZE_DEFAULT);
     if(m_socket->read(data) > 0)
     {
+      for(uint8_t& next : data){
+        std::cout << (int)next << " ";
+      }
       std::cout << std::endl;
       std::shared_ptr<ActionMessage::Action> nextAction(
         ActionMessage::ActionFactory::messageGenerate(data));
 
-      m_sim->actionSend(nextAction);
+      std::shared_ptr<ActionMessage::Action> reply
+        = m_sim->actionSendReply(nextAction);
+
+      std::shared_ptr<ActionMessage::ActionEncoder> encoder
+        = ActionMessage::ActionFactory::encoderGet(reply);
+      encoder->actionEncode(data);
+      m_socket->send(data);
     }
   }
 }

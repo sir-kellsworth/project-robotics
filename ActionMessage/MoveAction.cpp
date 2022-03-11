@@ -2,17 +2,17 @@
 
 
 const uint8_t ActionMessage::MoveAction::TYPE_ID = 3;
-const uint8_t ActionMessage::MoveAction::PACKET_SIZE = 1 + sizeof(float) + sizeof(float) + sizeof(float);
-const uint8_t ActionMessage::MoveAction::SIZE_PARAM_0 = sizeof(float);
-const uint8_t ActionMessage::MoveAction::SIZE_PARAM_1 = sizeof(float);
-const uint8_t ActionMessage::MoveAction::SIZE_PARAM_2 = sizeof(float);
+const uint8_t ActionMessage::MoveAction::PACKET_SIZE = 1 + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint16_t);
+const uint8_t ActionMessage::MoveAction::SIZE_PARAM_0 = sizeof(uint16_t);
+const uint8_t ActionMessage::MoveAction::SIZE_PARAM_1 = sizeof(uint16_t);
+const uint8_t ActionMessage::MoveAction::SIZE_PARAM_2 = sizeof(uint16_t);
 
 
 //*****************************************************************************
 ActionMessage::MoveAction::MoveAction(
-	float x,
-	float y,
-	float z)
+	uint16_t x,
+	uint16_t y,
+	uint16_t z)
 :m_x(x),
 m_y(y),
 m_z(z)
@@ -35,19 +35,19 @@ uint8_t ActionMessage::MoveAction::messageTypeGet()
 }
 
 //*****************************************************************************
-float ActionMessage::MoveAction::xGet()
+uint16_t ActionMessage::MoveAction::xGet()
 {
 	return m_x;
 }
 
 //*****************************************************************************
-float ActionMessage::MoveAction::yGet()
+uint16_t ActionMessage::MoveAction::yGet()
 {
 	return m_y;
 }
 
 //*****************************************************************************
-float ActionMessage::MoveAction::zGet()
+uint16_t ActionMessage::MoveAction::zGet()
 {
 	return m_z;
 }
@@ -57,7 +57,7 @@ float ActionMessage::MoveAction::zGet()
 void ActionMessage::MoveAction::xSet
 (
 
-	const float& x
+	const uint16_t& x
 )
 {
 	m_x = x;
@@ -67,7 +67,7 @@ void ActionMessage::MoveAction::xSet
 void ActionMessage::MoveAction::ySet
 (
 
-	const float& y
+	const uint16_t& y
 )
 {
 	m_y = y;
@@ -77,8 +77,10 @@ void ActionMessage::MoveAction::ySet
 void ActionMessage::MoveAction::zSet
 (
 
-	const float& z
+	const uint16_t& z
 )
 {
 	m_z = z;
 }
+
+

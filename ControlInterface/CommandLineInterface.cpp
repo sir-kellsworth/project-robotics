@@ -93,13 +93,20 @@ void ControlInterface::CommandLineInterface::commandParse
             stof(args[2])));
 
       std::shared_ptr<ActionMessage::Action> reply = m_device->actionSendReply(action);
-      if(reply.get() != 0 && reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
+      if(reply.get() != 0)
       {
-        std::cout << "success" << std::endl;
+        if(reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
+        {
+          std::cout << "success" << std::endl;
+        }
+        else
+        {
+          std::cout << "failed to move" << std::endl;
+        }
       }
       else
       {
-        std::cout << "failed to move" << std::endl;
+        std::cout << "received invalid message" << std::endl;
       }
     }
   }
