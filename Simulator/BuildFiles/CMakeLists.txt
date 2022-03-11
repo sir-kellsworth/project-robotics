@@ -80,8 +80,6 @@ set(SOURCE_CONFIG
 )
 
 set(SOURCE_COMMAND_INTERFACE
-  ${COMMAND_INTERFACE_DIR}/CommandLineInterface.cpp
-  ${COMMAND_INTERFACE_DIR}/CommandLineInterface.h
   ${COMMAND_INTERFACE_DIR}/Device.h
 )
 
