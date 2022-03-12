@@ -13,6 +13,7 @@ set(NETWORK_DIR ${BASE_DIR}/Network)
 set(UTILS_DIR ${BASE_DIR}/Utils)
 set(PATHING_DIR ${BASE_DIR}/Pathing)
 set(REMOTE_DIR ${BASE_DIR}/Remote)
+set(VENDOR_DIR ${BASE_DIR}/vendor)
 
 set(SOURCE_ACTION_MESSAGE
   ${ACTION_MESSAGE_DIR}/Action.cpp

@@ -9,7 +9,8 @@ set(ARDUINO_CONTROL_CODE_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(ACTION_MESSAGE_DIR ${BASE_DIR}/ActionMessage)
 set(UTILS_DIR ${BASE_DIR}/Utils)
 set(PATHING_DIR ${BASE_DIR}/Pathing)
-set(VENDOR_DIR ${BASE_DIR}/Arduino/vendor)
+set(VENDOR_ARDUINO_DIR ${BASE_DIR}/Arduino/vendor)
+set(VENDOR_DIR ${BASE_DIR}/vendor)
 
 set(SOURCE_ACTION_MESSAGE
   ${ACTION_MESSAGE_DIR}/Action.cpp
@@ -91,9 +92,17 @@ set(SOURCE_PATHING
   ${PATHING_DIR}/Point.h
 )
 
+set(SOURCE_VENDOR_ACCEL_STEPPER
+  ${VENDOR_ARDUINO_DIR}/AccelStepper.cpp
+  ${VENDOR_ARDUINO_DIR}/AccelStepper.h
+)
+
+add_compile_definitions(FIXMATH_NO_CACHE)
+file(GLOB SOURCE_VENDOR_LIBFIXMATH ${VENDOR_DIR}/libfixmath/source/libfixmath/*.h ${VENDOR_DIR}/libfixmath/source/libfixmath/*.hpp ${VENDOR_DIR}/libfixmath/source/libfixmath/*.c)
+
 set(SOURCE_VENDOR
-  ${VENDOR_DIR}/AccelStepper.cpp
-  ${VENDOR_DIR}/AccelStepper.h
+  ${SOURCE_VENDOR_ACCEL_STEPPER}
+  ${SOURCE_VENDOR_LIBFIXMATH}
 )
 
 set(SOURCE_ALL
@@ -107,9 +116,9 @@ set(SOURCE_ALL
 include_directories(
   "${BASE_DIR}/"
   "${CMAKE_CURRENT_LIST_DIR}/"
-  "${VENDOR_DIR}/"
+  "${VENDOR_ARDUINO_DIR}/"
+  "${VENDOR_DIR}/libfixmath/api/"
 )
-
 
 add_executable(RoboticArm ${CMAKE_CURRENT_LIST_DIR}/main.cpp ${SOURCE_ALL})
 target_link_arduino_libraries(RoboticArm AUTO_PUBLIC)
