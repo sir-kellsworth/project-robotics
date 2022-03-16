@@ -26,17 +26,14 @@ public:
 
   virtual ~RoboticArm();
 
-  virtual void actionSend(
-    shared_ptr<ActionMessage::Action> action);
-
   virtual shared_ptr<ActionMessage::Action> actionSendReply(
     shared_ptr<ActionMessage::Action> action);
 
   void step();
 
-  virtual void powerDownSend();
+  void powerDown();
 
-  virtual void powerUpSend();
+  void powerUp();
 private:
   bool anglesValidate(
     float baseAngle,

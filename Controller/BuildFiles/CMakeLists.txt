@@ -7,11 +7,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(BASE_DIR ${CMAKE_CURRENT_LIST_DIR}/../..)
 set(ACTION_MESSAGE_DIR ${BASE_DIR}/ActionMessage)
 set(CONFIG_DIR ${BASE_DIR}/Config)
+set(CONTROLLER_DIR ${BASE_DIR}/Controller)
 set(COMMAND_INTERFACE_DIR ${BASE_DIR}/ControlInterface)
 set(NETWORK_DIR ${BASE_DIR}/Network)
 set(UTILS_DIR ${BASE_DIR}/Utils)
 set(PATHING_DIR ${BASE_DIR}/Pathing)
-set(REMOTE_DIR ${BASE_DIR}/Remote)
+set(VENDOR_DIR ${BASE_DIR}/vendor)
 
 set(SOURCE_ACTION_MESSAGE
   ${ACTION_MESSAGE_DIR}/Action.cpp
@@ -77,9 +78,14 @@ set(SOURCE_CONFIG
   ${CONFIG_DIR}/Value.h
 )
 
+set(SOURCE_CONTROLLER
+  ${CONTROLLER_DIR}/CommandLineInterface.cpp
+  ${CONTROLLER_DIR}/CommandLineInterface.h
+  ${CONTROLLER_DIR}/RemoteInterface.cpp
+  ${CONTROLLER_DIR}/RemoteInterface.h
+)
+
 set(SOURCE_COMMAND_INTERFACE
-  ${COMMAND_INTERFACE_DIR}/CommandLineInterface.cpp
-  ${COMMAND_INTERFACE_DIR}/CommandLineInterface.h
   ${COMMAND_INTERFACE_DIR}/Device.h
 )
 
@@ -109,21 +115,14 @@ set(SOURCE_PATHING
   ${PATHING_DIR}/Point.h
 )
 
-set(SOURCE_REMOTE
-  ${REMOTE_DIR}/RemoteController.cpp
-  ${REMOTE_DIR}/RemoteController.h
-  ${REMOTE_DIR}/RemoteInterface.cpp
-  ${REMOTE_DIR}/RemoteInterface.h
-)
-
 set(SOURCE_ALL
   ${SOURCE_ACTION_MESSAGE}
   ${SOURCE_CONFIG}
+  ${SOURCE_CONTROLLER}
   ${SOURCE_COMMAND_INTERFACE}
   ${SOURCE_NETWORK}
   ${SOURCE_UTILS}
   ${SOURCE_PATHING}
-  ${SOURCE_REMOTE}
 )
 
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)

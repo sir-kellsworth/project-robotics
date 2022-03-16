@@ -51,9 +51,9 @@ void Utils::anglesCalculate
   Fix16 xy = (squared(x) + squared(y)).sqrt();
   Fix16 c = (squared(xy) + squared(z)).sqrt();
   Fix16 D1 = z.atan2(xy + epsilon_fix);
-  Fix16 D2 = lawOfCosines(c, armLength, forarmLength);
+  Fix16 D2 = lawOfCosines(c, (int16_t)armLength, (int16_t)forarmLength);
   shoulderAngle = (D1 + D2) * RADIANS_TO_DEGREES;
-  elbowAngle = lawOfCosines(Fix16(armLength), Fix16(forarmLength), c) * RADIANS_TO_DEGREES;
+  elbowAngle = lawOfCosines((int16_t)armLength, (int16_t)forarmLength, c) * RADIANS_TO_DEGREES;
 }
 
 

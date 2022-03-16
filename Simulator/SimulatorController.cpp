@@ -80,16 +80,6 @@ bool Simulator::SimulatorController::about
 
 
 //*****************************************************************************
-void Simulator::SimulatorController::actionSend
-(
-  std::shared_ptr<ActionMessage::Action> nextAction
-)
-{
-
-}
-
-
-//*****************************************************************************
 shared_ptr<ActionMessage::Action> Simulator::SimulatorController::actionSendReply
 (
   shared_ptr<ActionMessage::Action> action
@@ -146,18 +136,4 @@ shared_ptr<ActionMessage::Action> Simulator::SimulatorController::actionSendRepl
   }
 
   return reply;
-}
-
-
-//*****************************************************************************
-void Simulator::SimulatorController::powerDownSend()
-{
-
-}
-
-
-//*****************************************************************************
-void Simulator::SimulatorController::powerUpSend()
-{
-
 }

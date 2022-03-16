@@ -1,5 +1,5 @@
-#ifndef REMOTE_REMOTECONTROLLER_H
-#define REMOTE_REMOTECONTROLLER_H
+#ifndef SIMULATOR_REMOTECONTROLLER_H
+#define SIMULATOR_REMOTECONTROLLER_H
 
 #include "ControlInterface/Device.h"
 #include "Network/SocketTcp.h"
@@ -9,7 +9,7 @@
 #include <string>
 #include <thread>
 
-namespace Remote
+namespace Simulator
 {
 
 class RemoteController

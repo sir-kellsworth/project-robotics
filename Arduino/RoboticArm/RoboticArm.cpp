@@ -59,17 +59,6 @@ RoboticArm::~RoboticArm()
 
 
 //*****************************************************************************
-void RoboticArm::actionSend
-(
-  shared_ptr<ActionMessage::Action> action
-)
-{
-  m_actionQueue.push(action);
-}
-
-
-//*****************************************************************************
-//This function should not be used
 shared_ptr<ActionMessage::Action> RoboticArm::actionSendReply
 (
   shared_ptr<ActionMessage::Action> action
@@ -93,19 +82,19 @@ shared_ptr<ActionMessage::Action> RoboticArm::actionSendReply
     }
     else if(action->messageTypeGet() == ActionMessage::PowerDownAction::TYPE_ID)
     {
-      powerDownSend();
+      powerDown();
 
       response.reset(new ActionMessage::SuccessAction());
     }
     else if(action->messageTypeGet() == ActionMessage::PowerUpAction::TYPE_ID)
     {
-      powerUpSend();
+      powerUp();
 
       response.reset(new ActionMessage::SuccessAction());
     }
     else if(action->messageTypeGet() == ActionMessage::KillAction::TYPE_ID)
     {
-      powerDownSend();
+      powerDown();
 
       response.reset(new ActionMessage::FailedAction());
     }
@@ -223,7 +212,7 @@ void RoboticArm::step()
 
 
 //*****************************************************************************
-void RoboticArm::powerDownSend()
+void RoboticArm::powerDown()
 {
   m_baseMotor.disableOutputs();
   m_shoulderMotor.disableOutputs();
@@ -232,7 +221,7 @@ void RoboticArm::powerDownSend()
 
 
 //*****************************************************************************
-void RoboticArm::powerUpSend()
+void RoboticArm::powerUp()
 {
   m_baseMotor.enableOutputs();
   m_shoulderMotor.enableOutputs();

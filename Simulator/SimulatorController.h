@@ -29,15 +29,8 @@ public:
     const Pathing::Point& a,
     const Pathing::Point& b);
 
-  virtual void actionSend(
-    std::shared_ptr<ActionMessage::Action> nextAction);
-
   virtual shared_ptr<ActionMessage::Action> actionSendReply(
     shared_ptr<ActionMessage::Action> action);
-
-  virtual void powerDownSend();
-
-  virtual void powerUpSend();
 private:
   Simulator::SimulatorArm<float> m_masterSimulator;
   Simulator::SimulatorArm<Fix16> m_testerSimulator;

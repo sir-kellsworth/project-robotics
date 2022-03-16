@@ -11,15 +11,8 @@ namespace ControlInterface
 class Device
 {
 public:
-  virtual void actionSend(
-    shared_ptr<ActionMessage::Action> nextAction) = 0;
-
   virtual shared_ptr<ActionMessage::Action> actionSendReply(
     shared_ptr<ActionMessage::Action> nextAction) = 0;
-
-  virtual void powerDownSend() = 0;
-
-  virtual void powerUpSend() = 0;
 };
 
 }

@@ -1,4 +1,4 @@
-#include "Remote/RemoteController.h"
+#include "Simulator/RemoteController.h"
 
 #include "ActionMessage/ActionFactory/ActionFactory.h"
 #include "Network/ServerTcp.h"
@@ -13,7 +13,7 @@ namespace
 }
 
 //*****************************************************************************
-Remote::RemoteController::RemoteController
+Simulator::RemoteController::RemoteController
 (
   std::unique_ptr<ControlInterface::Device>& sim,
   unsigned short port
@@ -26,12 +26,12 @@ Remote::RemoteController::RemoteController
   m_socket = server.accept();
   std::cout << "received valid connection" << std::endl;
 
-  m_thread = std::thread(&Remote::RemoteController::backgroundHandle, this);
+  m_thread = std::thread(&Simulator::RemoteController::backgroundHandle, this);
 }
 
 
 //*****************************************************************************
-Remote::RemoteController::~RemoteController()
+Simulator::RemoteController::~RemoteController()
 {
   m_running = false;
   m_thread.join();
@@ -39,7 +39,7 @@ Remote::RemoteController::~RemoteController()
 
 
 //*****************************************************************************
-void Remote::RemoteController::backgroundHandle()
+void Simulator::RemoteController::backgroundHandle()
 {
   while(m_running)
   {

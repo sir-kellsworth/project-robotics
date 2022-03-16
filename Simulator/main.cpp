@@ -1,11 +1,10 @@
 #include "Config/Config.h"
 #include "Pathing/Point.h"
-#include "Simulator/SimulatorController.h"
-#include "Simulator/SimulatorArm.h"
 #include "Utils/TrigEquations.h"
 #include "Utils/StringUtils.h"
-#include "Remote/RemoteController.h"
-#include "Remote/RemoteInterface.h"
+#include "Simulator/RemoteController.h"
+#include "Simulator/SimulatorController.h"
+#include "Simulator/SimulatorArm.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -33,7 +32,7 @@ namespace
 }
 
 
-std::shared_ptr<Remote::RemoteController> simulatorArmMake
+std::shared_ptr<Simulator::RemoteController> simulatorArmMake
 (
   Config::ConfigMap& map
 )
@@ -93,8 +92,8 @@ std::shared_ptr<Remote::RemoteController> simulatorArmMake
       elbowMotor));
 
   unsigned short port = map[CONFIG_KEY_SIM][CONFIG_KEY_PORT].valueGet<unsigned short>();
-  return std::shared_ptr<Remote::RemoteController>(
-    new Remote::RemoteController(
+  return std::shared_ptr<Simulator::RemoteController>(
+    new Simulator::RemoteController(
       sim,
       port));
 }
@@ -104,7 +103,7 @@ std::shared_ptr<Remote::RemoteController> simulatorArmMake
 int main(int argc, char* argv[])
 {
   Config::ConfigMap map = Config::configGet(CONFIG_FILE);
-  std::shared_ptr<Remote::RemoteController> sim = simulatorArmMake(map);
+  std::shared_ptr<Simulator::RemoteController> sim = simulatorArmMake(map);
 
   while(true)
   {
