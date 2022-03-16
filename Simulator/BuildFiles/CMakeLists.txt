@@ -11,7 +11,6 @@ set(COMMAND_INTERFACE_DIR ${BASE_DIR}/ControlInterface)
 set(NETWORK_DIR ${BASE_DIR}/Network)
 set(UTILS_DIR ${BASE_DIR}/Utils)
 set(PATHING_DIR ${BASE_DIR}/Pathing)
-set(REMOTE_DIR ${BASE_DIR}/Remote)
 set(SIMULATOR_DIR ${BASE_DIR}/Simulator)
 set(VENDOR_DIR ${BASE_DIR}/vendor)
 
@@ -109,14 +108,9 @@ set(SOURCE_PATHING
   ${PATHING_DIR}/Point.h
 )
 
-set(SOURCE_REMOTE
-  ${REMOTE_DIR}/RemoteController.cpp
-  ${REMOTE_DIR}/RemoteController.h
-  ${REMOTE_DIR}/RemoteInterface.cpp
-  ${REMOTE_DIR}/RemoteInterface.h
-)
-
 set(SOURCE_SIMULATOR
+  ${SIMULATOR_DIR}/RemoteController.cpp
+  ${SIMULATOR_DIR}/RemoteController.h
   ${SIMULATOR_DIR}/SimulatorController.cpp
   ${SIMULATOR_DIR}/SimulatorController.h
   ${SIMULATOR_DIR}/SimulatorArm.cpp
@@ -132,7 +126,6 @@ set(SOURCE_ALL
   ${SOURCE_NETWORK}
   ${SOURCE_UTILS}
   ${SOURCE_PATHING}
-  ${SOURCE_REMOTE}
   ${SOURCE_SIMULATOR}
 )
 
