@@ -1,11 +1,11 @@
-#ifndef REMOTE_REMOTEINTERFACE_H
-#define REMOTE_REMOTEINTERFACE_H
+#ifndef CONTROLLER_REMOTEINTERFACE_H
+#define CONTROLLER_REMOTEINTERFACE_H
 
 
 #include "ControlInterface/Device.h"
 #include "Network/Socket.h"
 
-namespace Remote
+namespace Controller
 {
 
 class RemoteInterface : public ControlInterface::Device

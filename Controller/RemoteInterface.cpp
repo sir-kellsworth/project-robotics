@@ -1,4 +1,4 @@
-#include "Remote/RemoteInterface.h"
+#include "Controller/RemoteInterface.h"
 
 
 #include "ActionMessage/ActionEncoder.h"
@@ -12,7 +12,7 @@ namespace
 }
 
 //*****************************************************************************
-Remote::RemoteInterface::RemoteInterface
+Controller::RemoteInterface::RemoteInterface
 (
   std::unique_ptr<Network::Socket>& socket
 )
@@ -23,14 +23,14 @@ Remote::RemoteInterface::RemoteInterface
 
 
 //*****************************************************************************
-Remote::RemoteInterface::~RemoteInterface()
+Controller::RemoteInterface::~RemoteInterface()
 {
 
 }
 
 
 //*****************************************************************************
-shared_ptr<ActionMessage::Action> Remote::RemoteInterface::actionSendReply
+shared_ptr<ActionMessage::Action> Controller::RemoteInterface::actionSendReply
 (
   std::shared_ptr<ActionMessage::Action> nextAction
 )

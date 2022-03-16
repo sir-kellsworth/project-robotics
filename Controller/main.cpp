@@ -1,8 +1,8 @@
 #include "Config/Config.h"
 #include "Controller/CommandLineInterface.h"
+#include "Controller/RemoteInterface.h"
 #include "Network/SocketSerial.h"
 #include "Network/SocketTcp.h"
-#include "Remote/RemoteInterface.h"
 
 
 namespace
@@ -53,8 +53,8 @@ int main
     uint16_t baudRate = map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_SERIAL_INTERFACE][CONFIG_KEY_BAUD_RATE].valueGet<uint16_t>();
     socket = std::unique_ptr<Network::Socket>(new Network::SocketSerial(deviceName, baudRate));
   }
-  std::shared_ptr<Remote::RemoteInterface> remoteInterface(
-    new Remote::RemoteInterface(socket));
+  std::shared_ptr<Controller::RemoteInterface> remoteInterface(
+    new Controller::RemoteInterface(socket));
 
   interface.deviceSet(remoteInterface);
   interface.run();

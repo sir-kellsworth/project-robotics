@@ -12,7 +12,6 @@ set(COMMAND_INTERFACE_DIR ${BASE_DIR}/ControlInterface)
 set(NETWORK_DIR ${BASE_DIR}/Network)
 set(UTILS_DIR ${BASE_DIR}/Utils)
 set(PATHING_DIR ${BASE_DIR}/Pathing)
-set(REMOTE_DIR ${BASE_DIR}/Remote)
 set(VENDOR_DIR ${BASE_DIR}/vendor)
 
 set(SOURCE_ACTION_MESSAGE
@@ -82,6 +81,8 @@ set(SOURCE_CONFIG
 set(SOURCE_CONTROLLER
   ${CONTROLLER_DIR}/CommandLineInterface.cpp
   ${CONTROLLER_DIR}/CommandLineInterface.h
+  ${CONTROLLER_DIR}/RemoteInterface.cpp
+  ${CONTROLLER_DIR}/RemoteInterface.h
 )
 
 set(SOURCE_COMMAND_INTERFACE
@@ -112,13 +113,6 @@ set(SOURCE_PATHING
   ${PATHING_DIR}/Path.h
   ${PATHING_DIR}/Point.cpp
   ${PATHING_DIR}/Point.h
-)
-
-set(SOURCE_REMOTE
-  ${REMOTE_DIR}/RemoteController.cpp
-  ${REMOTE_DIR}/RemoteController.h
-  ${REMOTE_DIR}/RemoteInterface.cpp
-  ${REMOTE_DIR}/RemoteInterface.h
 )
 
 set(SOURCE_ALL
