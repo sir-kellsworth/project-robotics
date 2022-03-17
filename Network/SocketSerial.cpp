@@ -1,5 +1,6 @@
 #include "Network/SocketSerial.h"
 
+#include <cstring>
 #include <iostream>
 #include <fcntl.h> // Contains file controls like O_RDWR
 #include <errno.h> // Error integer and strerror() function
@@ -84,14 +85,20 @@ bool Network::SocketSerial::send
 )
 {
   std::lock_guard<std::mutex> lock(m_mutex);
-  bool success(false);
+  bool success(true);
 
   std::cout << "sending " << data.size() << " bytes (plus 3 end bytes)" << std::endl;
-  if(write(m_handle, data.data(), data.size()) > 0)
+  //arduino requires that end bytes are attached
+  int totalSize(data.size() + NUM_END_BYTES);
+  char rawData[totalSize];
+  char* ptr = rawData;
+  memcpy(ptr, data.data(), data.size());
+  ptr += data.size();
+  memcpy(ptr, MESSAGE_END_BYTES, NUM_END_BYTES);
+  if(write(m_handle, ptr, totalSize) <= 0)
   {
-    //arduino requires that end bytes are attached
-    write(m_handle, MESSAGE_END_BYTES, NUM_END_BYTES);
-    success = true;
+    success = false;
+    std::cout << "failed to send data" << std::endl;
   }
 
   return success;
@@ -117,11 +124,11 @@ uint32_t Network::SocketSerial::read
   }
   std::cout << "read " << bytesRead << " bytes (including end bytes)" << std::endl;
 
+  //arduino requires that end bytes are attached
   if(bytesRead - NUM_END_BYTES > 0)
   {
     bytesRead -= NUM_END_BYTES;
   }
-  //arduino requires that end bytes are attached
   data.resize(bytesRead);
 
   return bytesRead;
