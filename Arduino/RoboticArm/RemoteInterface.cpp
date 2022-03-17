@@ -16,7 +16,9 @@ namespace
 
 //*****************************************************************
 RemoteInterface::RemoteInterface()
-:m_buffer(BUFFER_MAX_SIZE),
+:m_state(LENGTH_GET_STATE),
+ m_messageLength(0),
+ m_buffer(BUFFER_MAX_SIZE),
  m_actionAvailable(false),
  m_bufferIndex(0)
 {
@@ -42,6 +44,7 @@ bool RemoteInterface::actionGet
   {
     nextAction = m_nextAction;
     success = true;
+    m_actionAvailable = false;
   }
 
   return success;
@@ -80,8 +83,9 @@ void RemoteInterface::send
     = ActionMessage::ActionFactory::encoderGet(response);
   encoder->actionEncode(data);
 
+  uint16_t length(data.size());
+  Serial.write((uint8_t*)&length, 2);
   Serial.write(data.data(), data.size());
-  Serial.write(MESSAGE_END, NUM_END_BYTES);
   Serial.flush();
 }
 
@@ -89,22 +93,38 @@ void RemoteInterface::send
 //*****************************************************************
 void RemoteInterface::step()
 {
+  if(m_state == MESSAGE_PROCESS_STATE)
+  {
+    m_nextAction.reset(
+      ActionMessage::ActionFactory::messageGenerate(m_buffer).release());
+    m_actionAvailable = true;
+    memset(m_buffer.data(), 0, m_bufferIndex);
+    m_bufferIndex = 0;
+    m_state = LENGTH_GET_STATE;
+  }
   if(Serial.available() > 0)
   {
-    while(Serial.available() > 0)
+    if(m_state == LENGTH_GET_STATE)
     {
-      m_buffer[m_bufferIndex] = Serial.read();
-      ++m_bufferIndex;
+      //only want to get the length when the entire uint16 is available
+      if(Serial.available() >= 2)
+      {
+        m_messageLength = Serial.read() | (Serial.read() << 8);
+        m_state = MESSAGE_GET_STATE;
+      }
     }
-
-    if(endFound())
+    else if(m_state == MESSAGE_GET_STATE)
     {
-      m_buffer.resize(m_buffer.size() - NUM_END_BYTES);
-      m_nextAction.reset(
-        ActionMessage::ActionFactory::messageGenerate(m_buffer).release());
-      m_actionAvailable = true;
-      memset((volatile void *)m_buffer.data(), 0, m_bufferIndex);
-      m_bufferIndex = 0;
+      while(Serial.available() > 0)
+      {
+        m_buffer[m_bufferIndex] = Serial.read();
+        ++m_bufferIndex;
+      }
+
+      if(m_bufferIndex >= m_messageLength)
+      {
+        m_state = MESSAGE_PROCESS_STATE;
+      }
     }
   }
 }

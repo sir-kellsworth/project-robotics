@@ -65,8 +65,6 @@ private:
 
   Pathing::Point m_home;
   Pathing::Point m_currentPosition;
-
-  Utils::Queue<ActionMessage::Action> m_actionQueue;
 };
 
 #endif
