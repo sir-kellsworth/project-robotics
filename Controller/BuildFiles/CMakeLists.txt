@@ -103,6 +103,7 @@ set(SOURCE_NETWORK
 set(SOURCE_UTILS
   ${UTILS_DIR}/Logger.cpp
   ${UTILS_DIR}/Logger.h
+  ${UTILS_DIR}/LoggerDefines.h
   ${UTILS_DIR}/SafeQueue.h
   ${UTILS_DIR}/Semaphore.cpp
   ${UTILS_DIR}/Semaphore.h

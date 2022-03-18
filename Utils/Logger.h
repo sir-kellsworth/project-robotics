@@ -16,8 +16,6 @@ public:
     DEBUG_LEVEL,
   };
 
-  Logger();
-
   ~Logger();
 
   void debugLog(
@@ -35,11 +33,15 @@ public:
   void levelSet(
     LOG_LEVEL level);
 
+  static Logger& loggerGet();
+
   void messageLog(
     const std::string& logLevel,
     const std::string& domain,
     const std::string& message);
 private:
+  Logger();
+
   LOG_LEVEL m_logLevel;
   std::mutex m_mutex;
 };

@@ -83,6 +83,15 @@ void Utils::Logger::levelSet
 
 
 //*****************************************************************************
+Utils::Logger& Utils::Logger::loggerGet()
+{
+  static Logger logger;
+
+  return logger;
+}
+
+
+//*****************************************************************************
 void Utils::Logger::messageLog
 (
   const std::string& logLevel,
@@ -97,5 +106,5 @@ void Utils::Logger::messageLog
 
   std::cout << time
     << logLevel << "\t"
-    << domain << "- -" << message << std::endl;
+    << "-" << domain << "- -" << message << std::endl;
 }
