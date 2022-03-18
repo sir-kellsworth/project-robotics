@@ -19,16 +19,16 @@ public:
   ~Logger();
 
   void debugLog(
-    const std::string& domain,
-    const char* format...);
+    const char* domain,
+    const char* format, ...);
 
   void errorLog(
-    const std::string& domain,
-    const char* format...);
+    const char* domain,
+    const char* format, ...);
 
   void infoLog(
-    const std::string& domain,
-    const char* format...);
+    const char* domain,
+    const char* format, ...);
 
   void levelSet(
     LOG_LEVEL level);
@@ -37,8 +37,9 @@ public:
 
   void messageLog(
     const std::string& logLevel,
-    const std::string& domain,
-    const char* format...);
+    const char* domain,
+    const char* format,
+    va_list args);
 private:
   Logger();
 

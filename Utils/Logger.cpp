@@ -34,15 +34,15 @@ Utils::Logger::~Logger()
 //*****************************************************************************
 void Utils::Logger::debugLog
 (
-  const std::string& domain,
-  const char* format...
+  const char* domain,
+  const char* format, ...
 )
 {
   if(m_logLevel >= DEBUG_LEVEL)
   {
     va_list args;
     va_start(args, format);
-    messageLog(ERROR_LOG_TAG, domain, format, args);
+    messageLog(DEBUG_LOG_TAG, domain, format, args);
     va_end(args);
   }
 }
@@ -51,8 +51,8 @@ void Utils::Logger::debugLog
 //*****************************************************************************
 void Utils::Logger::errorLog
 (
-  const std::string& domain,
-  const char* format...
+  const char* domain,
+  const char* format, ...
 )
 {
   if(m_logLevel >= ERROR_LEVEL)
@@ -68,15 +68,15 @@ void Utils::Logger::errorLog
 //*****************************************************************************
 void Utils::Logger::infoLog
 (
-  const std::string& domain,
-  const char* format...
+  const char* domain,
+  const char* format, ...
 )
 {
   if(m_logLevel >= INFO_LEVEL)
   {
     va_list args;
     va_start(args, format);
-    messageLog(ERROR_LOG_TAG, domain, format, args);
+    messageLog(INFO_LOG_TAG, domain, format, args);
     va_end(args);
   }
 }
@@ -105,19 +105,17 @@ Utils::Logger& Utils::Logger::loggerGet()
 void Utils::Logger::messageLog
 (
   const std::string& logLevel,
-  const std::string& domain,
-  const char* format...
+  const char* domain,
+  const char* format,
+  va_list args
 )
 {
   std::time_t currentTime = std::time(0);
   char time[100];
   strftime(time, 100, "%H:%M:%S", localtime(&currentTime));
 
-  va_list args;
-  va_start(args, format);
-  char message[500];
-  vsprintf(message, format, args);
-  va_end(args);
+  std::string message(512, '\0');
+  std::vsnprintf(&message[0], message.length(), format, args);
 
   std::lock_guard<std::mutex> lock(m_mutex);
   std::cout << time
