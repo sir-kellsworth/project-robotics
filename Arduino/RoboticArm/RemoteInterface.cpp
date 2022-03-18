@@ -52,27 +52,6 @@ bool RemoteInterface::actionGet
 
 
 //*****************************************************************
-bool RemoteInterface::endFound()
-{
-  bool success(false);
-  if(m_bufferIndex > NUM_END_BYTES)
-  {
-    uint8_t bufferStartIndex = m_bufferIndex - NUM_END_BYTES;
-    for(int i = 0; i < NUM_END_BYTES; ++i)
-    {
-      if(m_buffer[bufferStartIndex + i] != MESSAGE_END[i])
-      {
-        return false;
-      }
-    }
-    success = true;
-  }
-
-  return success;
-}
-
-
-//*****************************************************************
 void RemoteInterface::send
 (
   const shared_ptr<ActionMessage::Action>& response

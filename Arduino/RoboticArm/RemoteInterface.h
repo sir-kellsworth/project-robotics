@@ -34,8 +34,6 @@ private:
     MESSAGE_PROCESS_STATE,
   };
 
-  bool endFound();
-
   SERIAL_STATE m_state;
   uint16_t m_messageLength;
   vector<uint8_t> m_buffer;
