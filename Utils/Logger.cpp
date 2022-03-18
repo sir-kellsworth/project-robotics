@@ -1,6 +1,7 @@
 #include "Utils/Logger.h"
 
 #include <iostream>
+#include <stdarg.h>
 
 
 namespace
@@ -34,12 +35,15 @@ Utils::Logger::~Logger()
 void Utils::Logger::debugLog
 (
   const std::string& domain,
-  const std::string& message
+  const char* format...
 )
 {
   if(m_logLevel >= DEBUG_LEVEL)
   {
-    messageLog(DEBUG_LOG_TAG, domain, message);
+    va_list args;
+    va_start(args, format);
+    messageLog(ERROR_LOG_TAG, domain, format, args);
+    va_end(args);
   }
 }
 
@@ -48,12 +52,15 @@ void Utils::Logger::debugLog
 void Utils::Logger::errorLog
 (
   const std::string& domain,
-  const std::string& message
+  const char* format...
 )
 {
   if(m_logLevel >= ERROR_LEVEL)
   {
-    messageLog(ERROR_LOG_TAG, domain, message);
+    va_list args;
+    va_start(args, format);
+    messageLog(ERROR_LOG_TAG, domain, format, args);
+    va_end(args);
   }
 }
 
@@ -62,12 +69,15 @@ void Utils::Logger::errorLog
 void Utils::Logger::infoLog
 (
   const std::string& domain,
-  const std::string& message
+  const char* format...
 )
 {
   if(m_logLevel >= INFO_LEVEL)
   {
-    messageLog(INFO_LOG_TAG, domain, message);
+    va_list args;
+    va_start(args, format);
+    messageLog(ERROR_LOG_TAG, domain, format, args);
+    va_end(args);
   }
 }
 
@@ -96,14 +106,20 @@ void Utils::Logger::messageLog
 (
   const std::string& logLevel,
   const std::string& domain,
-  const std::string& message
+  const char* format...
 )
 {
-  std::lock_guard<std::mutex> lock(m_mutex);
   std::time_t currentTime = std::time(0);
   char time[100];
   strftime(time, 100, "%H:%M:%S", localtime(&currentTime));
 
+  va_list args;
+  va_start(args, format);
+  char message[500];
+  vsprintf(message, format, args);
+  va_end(args);
+
+  std::lock_guard<std::mutex> lock(m_mutex);
   std::cout << time
     << logLevel << "\t"
     << "-" << domain << "- -" << message << std::endl;

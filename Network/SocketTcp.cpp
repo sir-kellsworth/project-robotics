@@ -1,5 +1,7 @@
 #include "Network/SocketTcp.h"
 
+#include "Utils/LoggerDefines.h"
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,6 +13,11 @@
 #include <netdb.h>
 
 
+namespace
+{
+  const char* LOGGER_DOMAIN ("SocketTcp");
+}
+
 //*****************************************************************************
 Network::SocketTcp::SocketTcp
 (
@@ -21,7 +28,7 @@ Network::SocketTcp::SocketTcp
     m_handle = socket(AF_INET, SOCK_STREAM, 0);
     if(m_handle < 0)
     {
-      std::cout << "failed to create tcp socket" << std::endl;
+      LOGGER_ERROR(LOGGER_DOMAIN, "failed to create tcp socket");
     }
 
     struct sockaddr_in serv_addr;
@@ -33,7 +40,7 @@ Network::SocketTcp::SocketTcp
     serv_addr.sin_port = htons(port);
     if (connect(m_handle,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
     {
-      std::cout << "failed to connect to server at " << std::endl;
+      LOGGER_ERROR(LOGGER_DOMAIN, "failed to connect to server at %s", ip.c_str());
     }
 }
 

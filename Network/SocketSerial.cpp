@@ -1,5 +1,7 @@
 #include "Network/SocketSerial.h"
 
+#include "Utils/LoggerDefines.h"
+
 #include <cstring>
 #include <iostream>
 #include <fcntl.h> // Contains file controls like O_RDWR
@@ -10,6 +12,8 @@
 
 namespace
 {
+  const char* LOGGER_DOMAIN ("SocketTcp");
+
   const uint8_t LENGTH_NUM_BYTES(2);
   const uint8_t NUM_END_BYTES(3);
   const uint8_t MESSAGE_END_BYTES[NUM_END_BYTES] = {0x44, 0x44, 0x44};
@@ -26,13 +30,13 @@ Network::SocketSerial::SocketSerial
   m_handle = open(deviceName.c_str(), O_RDWR | O_NOCTTY | O_SYNC);
   if(m_handle < 0)
   {
-    std::cout << "failed to open serial device: " << deviceName << std::endl;
+    LOGGER_ERROR(LOGGER_DOMAIN, "failed to open serial device: %s", deviceName.c_str());
   }
 
   struct termios tty;
   if(tcgetattr(m_handle, &tty) != 0)
   {
-    std::cout << "failed to get termios settings" << std::endl;
+    LOGGER_ERROR(LOGGER_DOMAIN, "failed to get termios settings");
   }
   tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;     // 8-bit chars
 	// disable IGNBRK for mismatched speed tests; otherwise receive break
@@ -56,7 +60,7 @@ Network::SocketSerial::SocketSerial
 
 	if (tcsetattr (m_handle, TCSANOW, &tty) != 0)
 	{
-	   std::cout << "failed to set termios settings " << errno << std::endl;
+	   LOGGER_ERROR(LOGGER_DOMAIN, "failed to set termios settings %i", errno);
 	}
 }
 
@@ -99,7 +103,7 @@ bool Network::SocketSerial::send
   if(write(m_handle, rawData, totalSize) <= 0)
   {
     success = false;
-    std::cout << "failed to send data" << std::endl;
+    LOGGER_ERROR(LOGGER_DOMAIN, "failed to send data");
   }
 
   return success;

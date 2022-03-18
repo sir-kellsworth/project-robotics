@@ -20,15 +20,15 @@ public:
 
   void debugLog(
     const std::string& domain,
-    const std::string& message);
+    const char* format...);
 
   void errorLog(
     const std::string& domain,
-    const std::string& message);
+    const char* format...);
 
   void infoLog(
     const std::string& domain,
-    const std::string& message);
+    const char* format...);
 
   void levelSet(
     LOG_LEVEL level);
@@ -38,7 +38,7 @@ public:
   void messageLog(
     const std::string& logLevel,
     const std::string& domain,
-    const std::string& message);
+    const char* format...);
 private:
   Logger();
 
