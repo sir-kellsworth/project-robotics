@@ -182,10 +182,10 @@ public:
     int capacity
   )
   {
-    if (data_ == nullptr)
+    if (data_ == 0)
     {
         data_ = new T[capacity];
-        count_ = 0;
+        count_ = capacity;
         capacity_ = capacity;
     }
     else if (capacity > capacity_)
@@ -202,7 +202,7 @@ public:
       // now remember the new pointer
       data_ = data;
     }
-    else if(capacity > 0)
+    else if(capacity > count_)
     {
       count_ = capacity;
     }

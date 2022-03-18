@@ -9,7 +9,6 @@ set(ARDUINO_CONTROL_CODE_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(ACTION_MESSAGE_DIR ${BASE_DIR}/ActionMessage)
 set(UTILS_DIR ${BASE_DIR}/Utils)
 set(PATHING_DIR ${BASE_DIR}/Pathing)
-set(VENDOR_ARDUINO_DIR ${BASE_DIR}/Arduino/vendor)
 set(VENDOR_DIR ${BASE_DIR}/vendor)
 
 set(SOURCE_ACTION_MESSAGE
@@ -93,8 +92,8 @@ set(SOURCE_PATHING
 )
 
 set(SOURCE_VENDOR_ACCEL_STEPPER
-  ${VENDOR_ARDUINO_DIR}/AccelStepper.cpp
-  ${VENDOR_ARDUINO_DIR}/AccelStepper.h
+  ${VENDOR_DIR}/AccelStepper/AccelStepper.cpp
+  ${VENDOR_DIR}/AccelStepper/AccelStepper.h
 )
 
 add_compile_definitions(FIXMATH_NO_CACHE)
@@ -118,6 +117,7 @@ include_directories(
   "${CMAKE_CURRENT_LIST_DIR}/"
   "${VENDOR_ARDUINO_DIR}/"
   "${VENDOR_DIR}/libfixmath/api/"
+  "${VENDOR_DIR}/AccelStepper/"
 )
 
 add_executable(RoboticArm ${CMAKE_CURRENT_LIST_DIR}/main.cpp ${SOURCE_ALL})

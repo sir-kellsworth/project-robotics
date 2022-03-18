@@ -16,10 +16,10 @@ public:
   template<class U>
   unique_ptr(U* pu) :pt(pu) {}
 
-  unique_ptr(const unique_ptr& s) :pt(s.pt) { }
+  unique_ptr(const unique_ptr& s) :pt(s.pt) { s.pt = 0; }
 
   template<class U>
-  unique_ptr(unique_ptr<U>& s) :pt(s.pt) {  }
+  unique_ptr(unique_ptr<U>& s) :pt(s.pt) { s.pt = 0; }
 
   ~unique_ptr()
   {
@@ -37,6 +37,7 @@ public:
       if(this!=&s)
       {
           pt=s.pt;
+          s.release();
       }
       return *this;
   }
@@ -50,6 +51,7 @@ public:
     if(get()!=s.get())
     {
         pt=s.get();
+        s.release();
     }
     return *this;
   }

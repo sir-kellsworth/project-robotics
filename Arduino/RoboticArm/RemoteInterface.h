@@ -27,8 +27,15 @@ public:
   void step();
 
 private:
-  bool endFound();
+  enum SERIAL_STATE
+  {
+    LENGTH_GET_STATE = 0,
+    MESSAGE_GET_STATE,
+    MESSAGE_PROCESS_STATE,
+  };
 
+  SERIAL_STATE m_state;
+  uint16_t m_messageLength;
   vector<uint8_t> m_buffer;
   shared_ptr<ActionMessage::Action> m_nextAction;
   bool m_actionAvailable;

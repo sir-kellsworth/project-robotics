@@ -1,5 +1,6 @@
 #include "Network/SocketSerial.h"
 
+#include <cstring>
 #include <iostream>
 #include <fcntl.h> // Contains file controls like O_RDWR
 #include <errno.h> // Error integer and strerror() function
@@ -9,6 +10,7 @@
 
 namespace
 {
+  const uint8_t LENGTH_NUM_BYTES(2);
   const uint8_t NUM_END_BYTES(3);
   const uint8_t MESSAGE_END_BYTES[NUM_END_BYTES] = {0x44, 0x44, 0x44};
 };
@@ -54,7 +56,7 @@ Network::SocketSerial::SocketSerial
 
 	if (tcsetattr (m_handle, TCSANOW, &tty) != 0)
 	{
-	        std::cout << "failed to set termios settings " << errno << std::endl;
+	   std::cout << "failed to set termios settings " << errno << std::endl;
 	}
 }
 
@@ -84,14 +86,20 @@ bool Network::SocketSerial::send
 )
 {
   std::lock_guard<std::mutex> lock(m_mutex);
-  bool success(false);
+  bool success(true);
 
-  std::cout << "sending " << data.size() << " bytes (plus 3 end bytes)" << std::endl;
-  if(write(m_handle, data.data(), data.size()) > 0)
+  //arduino requires that end bytes are attached
+  int totalSize(LENGTH_NUM_BYTES + data.size());
+  char rawData[totalSize];
+  char* ptr = rawData;
+  uint16_t length(data.size());
+  memcpy(ptr, &length, LENGTH_NUM_BYTES);
+  ptr += LENGTH_NUM_BYTES;
+  memcpy(ptr, data.data(), data.size());
+  if(write(m_handle, rawData, totalSize) <= 0)
   {
-    //arduino requires that end bytes are attached
-    write(m_handle, MESSAGE_END_BYTES, NUM_END_BYTES);
-    success = true;
+    success = false;
+    std::cout << "failed to send data" << std::endl;
   }
 
   return success;
@@ -113,15 +121,10 @@ uint32_t Network::SocketSerial::read
 	t.tv_sec = 1;
   if(select(m_handle+1, &socks, NULL, NULL, &t))
   {
+    sleep(1);
     bytesRead = ::read(m_handle, data.data(), data.size());
   }
-  std::cout << "read " << bytesRead << " bytes (including end bytes)" << std::endl;
-
-  if(bytesRead - NUM_END_BYTES > 0)
-  {
-    bytesRead -= NUM_END_BYTES;
-  }
-  //arduino requires that end bytes are attached
+  data.erase(data.begin(), data.begin() + 2);
   data.resize(bytesRead);
 
   return bytesRead;
