@@ -4,6 +4,8 @@
 #include "ActionMessage/HomeAction.h"
 #include "ActionMessage/MoveAction.h"
 #include "ActionMessage/NoAction.h"
+#include "ActionMessage/PowerDownAction.h"
+#include "ActionMessage/PowerUpAction.h"
 #include "ActionMessage/SuccessAction.h"
 #include "Pathing/Point.h"
 
@@ -70,7 +72,18 @@ void Controller::CommandLineInterface::commandParse
 
   if(command == COMMAND_HOME)
   {
-    std::cout << "not implemented yet" << std::endl;
+    std::shared_ptr<ActionMessage::Action> action
+      = std::shared_ptr<ActionMessage::HomeAction>();
+
+    std::shared_ptr<ActionMessage::Action> reply = m_device->actionSendReply(action);
+    if(reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
+    {
+      std::cout << "success" << std::endl;
+    }
+    else
+    {
+      std::cout << "failed to move to home" << std::endl;
+    }
   }
   else if(command == COMMAND_QUIT)
   {
@@ -112,11 +125,33 @@ void Controller::CommandLineInterface::commandParse
   }
   else if(command == COMMAND_POWER_DOWN)
   {
-    std::cout << "not implemented yet" << std::endl;
+    std::shared_ptr<ActionMessage::Action> action
+      = std::shared_ptr<ActionMessage::PowerDownAction>();
+
+    std::shared_ptr<ActionMessage::Action> reply = m_device->actionSendReply(action);
+    if(reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
+    {
+      std::cout << "success" << std::endl;
+    }
+    else
+    {
+      std::cout << "failed to power arm" << std::endl;
+    }
   }
   else if(command == COMMAND_POWER_UP)
   {
-    std::cout << "not implemented yet" << std::endl;
+    std::shared_ptr<ActionMessage::Action> action
+      = std::shared_ptr<ActionMessage::PowerUpAction>();
+
+    std::shared_ptr<ActionMessage::Action> reply = m_device->actionSendReply(action);
+    if(reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
+    {
+      std::cout << "success" << std::endl;
+    }
+    else
+    {
+      std::cout << "failed to power arm down" << std::endl;
+    }
   }
   else
   {
