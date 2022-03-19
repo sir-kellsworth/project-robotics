@@ -110,6 +110,7 @@ void Utils::Logger::messageLog
   va_list args
 )
 {
+  std::lock_guard<std::mutex> lock(m_mutex);
   std::time_t currentTime = std::time(0);
   char time[100];
   strftime(time, 100, "%H:%M:%S", localtime(&currentTime));
@@ -117,7 +118,6 @@ void Utils::Logger::messageLog
   std::string message(512, '\0');
   std::vsnprintf(&message[0], message.length(), format, args);
 
-  std::lock_guard<std::mutex> lock(m_mutex);
   std::cout << time
     << logLevel << "\t"
     << "-" << domain << "- -" << message << std::endl;
