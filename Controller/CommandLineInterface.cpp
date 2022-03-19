@@ -8,16 +8,20 @@
 #include "ActionMessage/PowerUpAction.h"
 #include "ActionMessage/SuccessAction.h"
 #include "Pathing/Point.h"
+#include "Utils/LoggerDefines.h"
 
 #include <iostream>
+#include <sstream>
 
 namespace
 {
-  const std::string COMMAND_HOME("home");
-  const std::string COMMAND_MOVE_TO("moveTo");
-  const std::string COMMAND_QUIT("quit");
-  const std::string COMMAND_POWER_DOWN("powerDown");
-  const std::string COMMAND_POWER_UP("powerUp");
+  const char* LOGGER_DOMAIN       ("Main");
+
+  const char* COMMAND_HOME        ("home");
+  const char* COMMAND_MOVE_TO     ("moveTo");
+  const char* COMMAND_QUIT        ("quit");
+  const char* COMMAND_POWER_DOWN  ("powerDown");
+  const char* COMMAND_POWER_UP    ("powerUp");
 
   const uint8_t MOVE_TO_NUM_ARGS(3);
 
@@ -78,11 +82,11 @@ void Controller::CommandLineInterface::commandParse
     std::shared_ptr<ActionMessage::Action> reply = m_device->actionSendReply(action);
     if(reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
     {
-      std::cout << "success" << std::endl;
+      LOGGER_INFO(LOGGER_DOMAIN, "success");
     }
     else
     {
-      std::cout << "failed to move to home" << std::endl;
+      LOGGER_INFO(LOGGER_DOMAIN, "failed to move to home");
     }
   }
   else if(command == COMMAND_QUIT)
@@ -94,7 +98,7 @@ void Controller::CommandLineInterface::commandParse
   {
     if(args.size() != MOVE_TO_NUM_ARGS)
     {
-      std::cout << "invalid number of args" << std::endl;
+      LOGGER_ERROR(LOGGER_DOMAIN, "invalid number of args");
     }
     else
     {
@@ -110,16 +114,16 @@ void Controller::CommandLineInterface::commandParse
       {
         if(reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
         {
-          std::cout << "success" << std::endl;
+          LOGGER_INFO(LOGGER_DOMAIN, "success");
         }
         else
         {
-          std::cout << "failed to move" << std::endl;
+          LOGGER_INFO(LOGGER_DOMAIN, "failed to move");
         }
       }
       else
       {
-        std::cout << "received invalid message" << std::endl;
+        LOGGER_INFO(LOGGER_DOMAIN, "received invalid message");
       }
     }
   }
@@ -131,11 +135,11 @@ void Controller::CommandLineInterface::commandParse
     std::shared_ptr<ActionMessage::Action> reply = m_device->actionSendReply(action);
     if(reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
     {
-      std::cout << "success" << std::endl;
+      LOGGER_INFO(LOGGER_DOMAIN, "success");
     }
     else
     {
-      std::cout << "failed to power arm" << std::endl;
+      LOGGER_INFO(LOGGER_DOMAIN, "failed to power arm");
     }
   }
   else if(command == COMMAND_POWER_UP)
@@ -146,11 +150,11 @@ void Controller::CommandLineInterface::commandParse
     std::shared_ptr<ActionMessage::Action> reply = m_device->actionSendReply(action);
     if(reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
     {
-      std::cout << "success" << std::endl;
+      LOGGER_INFO(LOGGER_DOMAIN, "success");
     }
     else
     {
-      std::cout << "failed to power arm down" << std::endl;
+      LOGGER_INFO(LOGGER_DOMAIN, "failed to power arm down");
     }
   }
   else
@@ -187,10 +191,13 @@ void Controller::CommandLineInterface::run()
 //*****************************************************************************
 void Controller::CommandLineInterface::usagePrint()
 {
-  std::cout << "commands:" << std::endl;
-  std::cout << "\thome" << std::endl;
-  std::cout << "\tmoveTo x y z" << std::endl;
-  std::cout << "\tpowerDown" << std::endl;
-  std::cout << "\tpowerUp" << std::endl;
-  std::cout << "\tquit" << std::endl;
+  std::stringstream ss;
+  ss << "commands:\n";
+  ss << "\thome\n";
+  ss << "\tmoveTo x y z\n";
+  ss << "\tpowerDown\n";
+  ss << "\tpowerUp\n";
+  ss << "\tquit";
+
+  std::cout << ss.str() << std::endl;
 }

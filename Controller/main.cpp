@@ -3,10 +3,12 @@
 #include "Controller/RemoteInterface.h"
 #include "Network/SocketSerial.h"
 #include "Network/SocketTcp.h"
+#include "Utils/LoggerDefines.h"
 
 
 namespace
 {
+  const char* LOGGER_DOMAIN                 ("Main");
   const char* CONFIG_FILE                   ("config.txt");
 
   const char* CONFIG_KEY_ARM_LENGTH         ("armLength");
@@ -43,12 +45,14 @@ int main
   std::unique_ptr<Network::Socket> socket;
   if(map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_INTERFACE_TYPE].valueGet<std::string>() == CONFIG_KEY_TCP_INTERFACE)
   {
+    LOGGER_INFO(LOGGER_DOMAIN, "Creating Tcp Interface");
     std::string remoteIp = map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_TCP_INTERFACE][CONFIG_KEY_IP_ADDRESS].valueGet<std::string>();
     unsigned short port = map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_TCP_INTERFACE][CONFIG_KEY_PORT].valueGet<unsigned short>();
     socket = std::unique_ptr<Network::Socket>(new Network::SocketTcp(remoteIp, port));
   }
   else if(map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_INTERFACE_TYPE].valueGet<std::string>() == CONFIG_KEY_SERIAL_INTERFACE)
   {
+    LOGGER_INFO(LOGGER_DOMAIN, "Creating Serial Interface");
     std::string deviceName = map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_SERIAL_INTERFACE][CONFIG_KEY_DEVICE_NAME].valueGet<std::string>();
     uint16_t baudRate = map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_SERIAL_INTERFACE][CONFIG_KEY_BAUD_RATE].valueGet<uint16_t>();
     socket = std::unique_ptr<Network::Socket>(new Network::SocketSerial(deviceName, baudRate));

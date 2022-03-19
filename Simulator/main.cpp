@@ -5,6 +5,7 @@
 #include "Simulator/RemoteController.h"
 #include "Simulator/SimulatorController.h"
 #include "Simulator/SimulatorArm.h"
+#include "Utils/LoggerDefines.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -12,7 +13,8 @@
 
 namespace
 {
-  const char* CONFIG_FILE("config.txt");
+  const char* LOGGER_DOMAIN                 ("Main");
+  const char* CONFIG_FILE                   ("config.txt");
 
   const char* CONFIG_KEY_ARM_LENGTH         ("armLength");
   const char* CONFIG_KEY_AVAILABLE          ("available");
@@ -92,6 +94,7 @@ std::shared_ptr<Simulator::RemoteController> simulatorArmMake
       elbowMotor));
 
   unsigned short port = map[CONFIG_KEY_SIM][CONFIG_KEY_PORT].valueGet<unsigned short>();
+  LOGGER_INFO(LOGGER_DOMAIN, "Listening to port %u", port);
   return std::shared_ptr<Simulator::RemoteController>(
     new Simulator::RemoteController(
       sim,
