@@ -1,3 +1,6 @@
 [submodule "vendor/libfixmath"]
 	path = vendor/libfixmath/source
 	url = https://github.com/PetteriAimonen/libfixmath.git
+[submodule "Arduino/Arduino-CMake-Toolchain"]
+	path = Arduino/Arduino-CMake-Toolchain
+	url = https://github.com/a9183756-gh/Arduino-CMake-Toolchain.git
