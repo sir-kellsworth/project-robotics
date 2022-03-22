@@ -18,12 +18,12 @@ public:
   SocketSerial(
     int handle);
 
-  ~SocketSerial();
+  virtual ~SocketSerial();
 
-  bool send(
+  virtual bool send(
     const std::vector<uint8_t>& data);
 
-  uint32_t read(
+  virtual uint32_t read(
     std::vector<uint8_t>& data);
 private:
   int m_handle;

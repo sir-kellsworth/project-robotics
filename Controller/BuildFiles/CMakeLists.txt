@@ -94,6 +94,8 @@ set(SOURCE_NETWORK
   ${NETWORK_DIR}/Socket.h
   ${NETWORK_DIR}/SocketSerial.cpp
   ${NETWORK_DIR}/SocketSerial.h
+  ${NETWORK_DIR}/SocketSerialLogger.cpp
+  ${NETWORK_DIR}/SocketSerialLogger.h
   ${NETWORK_DIR}/ServerTcp.cpp
   ${NETWORK_DIR}/ServerTcp.h
   ${NETWORK_DIR}/SocketTcp.cpp
