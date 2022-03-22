@@ -6,6 +6,7 @@
 
 namespace
 {
+  const uint16_t MESSAGE_SIZE_MAX   (500);
   const uint16_t LOG_HEADER_LENGTH  (7);
   const char* LOG_HEADER            ("##log##");
 }
@@ -34,8 +35,8 @@ void SerialLogger::log
 {
   va_list args;
   va_start(args, format);
-  char message[500];
-  uint16_t messageLength = vsnprintf(message, 500, format, args);
+  char message[MESSAGE_SIZE_MAX];
+  uint16_t messageLength = vsnprintf(message, MESSAGE_SIZE_MAX, format, args);
   uint16_t totalLength = LOG_HEADER_LENGTH + messageLength;
   Serial.write((uint8_t*)&totalLength, 2);
   Serial.write(LOG_HEADER);
