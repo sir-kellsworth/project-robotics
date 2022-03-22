@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(controller)
 
+option(USE_DEBUG "Enter debug mode" OFF)
+
 set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -94,6 +96,8 @@ set(SOURCE_NETWORK
   ${NETWORK_DIR}/Socket.h
   ${NETWORK_DIR}/SocketSerial.cpp
   ${NETWORK_DIR}/SocketSerial.h
+  ${NETWORK_DIR}/SocketSerialLogger.cpp
+  ${NETWORK_DIR}/SocketSerialLogger.h
   ${NETWORK_DIR}/ServerTcp.cpp
   ${NETWORK_DIR}/ServerTcp.h
   ${NETWORK_DIR}/SocketTcp.cpp
@@ -101,6 +105,7 @@ set(SOURCE_NETWORK
 )
 
 set(SOURCE_UTILS
+  ${UTILS_DIR}/MessageQueue.h
   ${UTILS_DIR}/Logger.cpp
   ${UTILS_DIR}/Logger.h
   ${UTILS_DIR}/LoggerDefines.h
@@ -127,6 +132,10 @@ set(SOURCE_ALL
   ${SOURCE_UTILS}
   ${SOURCE_PATHING}
 )
+
+if(USE_DEBUG)
+  add_definitions(-DARDUINO_DEBUG)
+endif()
 
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)

@@ -15,8 +15,6 @@ namespace
   const char* LOGGER_DOMAIN ("SocketTcp");
 
   const uint8_t LENGTH_NUM_BYTES(2);
-  const uint8_t NUM_END_BYTES(3);
-  const uint8_t MESSAGE_END_BYTES[NUM_END_BYTES] = {0x44, 0x44, 0x44};
 };
 
 

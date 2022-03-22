@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(RoboticSim)
 
+option(USE_DEBUG "Enter debug mode" OFF)
+
 set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -70,6 +72,8 @@ set(SOURCE_ACTION_MESSAGE
 
 
 set(SOURCE_ARDUINO_CONTROL_CODE
+  ${ARDUINO_CONTROL_CODE_DIR}/SerialLogger.cpp
+  ${ARDUINO_CONTROL_CODE_DIR}/SerialLogger.h
   ${ARDUINO_CONTROL_CODE_DIR}/RemoteInterface.cpp
   ${ARDUINO_CONTROL_CODE_DIR}/RemoteInterface.h
   ${ARDUINO_CONTROL_CODE_DIR}/RoboticArm.cpp
@@ -111,6 +115,10 @@ set(SOURCE_ALL
   ${SOURCE_PATHING}
   ${SOURCE_VENDOR}
 )
+
+if(USE_DEBUG)
+  add_definitions(-DARDUINO_DEBUG)
+endif()
 
 include_directories(
   "${BASE_DIR}/"

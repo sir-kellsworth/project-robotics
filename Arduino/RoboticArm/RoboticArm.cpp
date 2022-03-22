@@ -13,9 +13,9 @@
 
 namespace
 {
-  const uint16_t STEPPER_SPEED_MAX(1000);
-  const uint16_t STEPPER_SPEED_DEFAULT(400);
-  const float DEGREE_STEPS(1.8);
+  const uint16_t STEPPER_SPEED_MAX      (1000);
+  const uint16_t STEPPER_SPEED_DEFAULT  (400);
+  const float DEGREE_STEPS              (1.8);
 }
 
 //*****************************************************************************

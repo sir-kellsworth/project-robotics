@@ -35,7 +35,8 @@ Utils::Logger::~Logger()
 void Utils::Logger::debugLog
 (
   const char* domain,
-  const char* format, ...
+  const char* format,
+  ...
 )
 {
   if(m_logLevel >= DEBUG_LEVEL)
@@ -52,7 +53,8 @@ void Utils::Logger::debugLog
 void Utils::Logger::errorLog
 (
   const char* domain,
-  const char* format, ...
+  const char* format,
+  ...
 )
 {
   if(m_logLevel >= ERROR_LEVEL)
@@ -69,7 +71,8 @@ void Utils::Logger::errorLog
 void Utils::Logger::infoLog
 (
   const char* domain,
-  const char* format, ...
+  const char* format,
+  ...
 )
 {
   if(m_logLevel >= INFO_LEVEL)
