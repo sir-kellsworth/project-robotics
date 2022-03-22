@@ -2,6 +2,15 @@
 
 #include "Utils/LoggerDefines.h"
 
+#include <vector>
+
+
+namespace
+{
+  const uint16_t LOG_HEADER_LENGTH      (7);
+  const std::vector<uint8_t> LOG_HEADER {'#', '#', 'l', 'o', 'g', '#', '#'};
+  const char* ARDUINO_DOMAIN            ("Arduino Logger");
+}
 
 //*****************************************************************************
 Network::SocketSerialLogger::SocketSerialLogger
@@ -12,7 +21,7 @@ Network::SocketSerialLogger::SocketSerialLogger
 :m_socket(deviceName, baudRate),
  m_running(true)
 {
-  m_backgroundThread = std::thread(this, &Network::SocketSerialLogger::backgroundHandle);
+  m_backgroundThread = std::thread(&Network::SocketSerialLogger::backgroundHandle, this);
 }
 
 
@@ -24,7 +33,7 @@ Network::SocketSerialLogger::SocketSerialLogger
 :m_socket(handle),
  m_running(true)
 {
-  m_backgroundThread = std::thread(this, &Network::SocketSerialLogger::backgroundHandle);
+  m_backgroundThread = std::thread(&Network::SocketSerialLogger::backgroundHandle, this);
 }
 
 
@@ -40,13 +49,13 @@ void Network::SocketSerialLogger::backgroundHandle()
 {
   while(m_running)
   {
-    std::vector<uint8_t> data;
-    uint32_t size = m_socket.read(data);
-    if(!serialDebugLog(data))
+    std::vector<uint8_t> *data(new std::vector<uint8_t>());
+    uint32_t size = m_socket.read(*data);
+    if(!serialDebugLog(*data))
     {
-      data.resize(size);
+      data->resize(size);
       std::lock_guard<std::mutex> lock(m_queueMutex);
-      m_queue.push_back(data);
+      m_queue.push(data);
     }
   }
 }
@@ -68,11 +77,10 @@ uint32_t Network::SocketSerialLogger::read
   std::vector<uint8_t>& data
 )
 {
-  Packet packet = m_queue.pop();
-  if(packet.get())
+  std::vector<uint8_t>* packet = m_queue.pop();
+  if(packet)
   {
-    std::vector<uint8_t>* packetPtr = packet.release();
-    data = *packetPtr;
+    data = *packet;
   }
 
   return data.size();
@@ -88,7 +96,7 @@ bool Network::SocketSerialLogger::serialDebugLog
   bool loggedMessage(false);
   if(std::equal(LOG_HEADER.begin(), LOG_HEADER.end(), message.begin()))
   {
-    LOGGER_DEBUG(ARDUINO_DOMAIN, &message[LOG_HEADER_LENGTH]);
+    LOGGER_DEBUG(ARDUINO_DOMAIN, "%s", &message[LOG_HEADER_LENGTH]);
     loggedMessage = true;
   }
 

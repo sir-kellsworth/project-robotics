@@ -3,6 +3,7 @@
 
 #include "Network/Socket.h"
 #include "Network/SocketSerial.h"
+#include "Utils/MessageQueue.h"
 
 #include <atomic>
 #include <thread>
@@ -34,9 +35,8 @@ private:
   bool serialDebugLog(
     const std::vector<uint8_t>& message);
 
-  typedef std::shared_ptr<std::vector<uint8_t>> Packet;
   std::mutex m_queueMutex;
-  std::queue<Packet> m_queue;
+  Utils::MessageQueue<std::vector<uint8_t>> m_queue;
   std::thread m_backgroundThread;
   Network::SocketSerial m_socket;
   std::atomic<bool> m_running;
