@@ -1,7 +1,7 @@
 #include "Config/Config.h"
 #include "Controller/CommandLineInterface.h"
 #include "Controller/RemoteInterface.h"
-#ifdef __DEBUG__
+#ifdef ARDUINO_DEBUG
 #include "Network/SocketSerialLogger.h"
 #else
 #include "Network/SocketSerial.h"
@@ -59,7 +59,7 @@ int main
     LOGGER_INFO(LOGGER_DOMAIN, "Creating Serial Interface");
     std::string deviceName = map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_SERIAL_INTERFACE][CONFIG_KEY_DEVICE_NAME].valueGet<std::string>();
     uint16_t baudRate = map[CONFIG_KEY_REMOTE_CONTROLLER][CONFIG_KEY_SERIAL_INTERFACE][CONFIG_KEY_BAUD_RATE].valueGet<uint16_t>();
-#ifdef __DEBUG__
+#ifdef ARDUINO_DEBUG
     LOGGER_INFO(LOGGER_DOMAIN, "Using debug serial logger");
     socket = std::unique_ptr<Network::Socket>(new Network::SocketSerialLogger(deviceName, baudRate));
 #else
