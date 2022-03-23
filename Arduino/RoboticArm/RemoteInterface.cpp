@@ -78,7 +78,7 @@ void RemoteInterface::step()
   if(m_state == MESSAGE_PROCESS_STATE)
   {
     m_nextAction.reset(
-      ActionMessage::ActionFactory::messageGenerate(m_buffer).release());
+      ActionMessage::ActionFactory::messageGenerate(m_buffer));
     m_actionAvailable = true;
     memset(m_buffer.data(), 0, m_bufferIndex);
     m_bufferIndex = 0;

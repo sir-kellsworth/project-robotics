@@ -6,6 +6,7 @@
 template <typename T>
 using shared_ptr = std::shared_ptr<T>;
 #else
+#include "Utils/unique_ptr.h"
 
 template<class T>
 class shared_ptr
@@ -83,9 +84,15 @@ public:
     template<class U>
     shared_ptr(const shared_ptr<U>& s) :pa(s.pa), pt(s.pt) { inc(); }
 
+    template<class U>
+    shared_ptr(const unique_ptr<U>& s) { pt = s.release(); pa = new auximpl<U,default_deleter<U> >(pt, default_deleter<U>()); }
+
     ~shared_ptr() { dec(); }
 
     void reset(T* ptr) { dec(); pa = new auximpl<T, default_deleter<T> >(ptr, default_deleter<T>()); pt = ptr; }
+
+    template<class U>
+    void reset(const unique_ptr<U>& ptr) { dec(); pt = ptr.release(); pa = new auximpl<T, default_deleter<T> >(pt, default_deleter<T>()); }
 
     shared_ptr& operator=(const shared_ptr& s)
     {
