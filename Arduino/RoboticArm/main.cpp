@@ -43,6 +43,7 @@ void setup()
 }
 
 
+#include "ActionMessage/SuccessAction.h"
 //*****************************************************************************
 void loop()
 {
@@ -50,13 +51,12 @@ void loop()
 
   if(interface.actionGet(nextAction))
   {
-    LOGGER_DEBUG("got action");
-    shared_ptr<ActionMessage::Action> response = arm.actionSendReply(nextAction);
-    LOGGER_DEBUG("got response");
+    //shared_ptr<ActionMessage::Action> response = arm.actionSendReply(nextAction);
 
+    shared_ptr<ActionMessage::Action> response(new ActionMessage::SuccessAction());
     interface.send(response);
   }
 
   interface.step();
-  arm.step();
+  //arm.step();
 }

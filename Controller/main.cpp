@@ -44,12 +44,12 @@ int main
   char* argv[]
 )
 {
-#ifdef ARDUINO_DEBUG
+//#ifdef ARDUINO_DEBUG
   {
     Utils::Logger& logger = Utils::Logger::loggerGet();
     logger.levelSet(Utils::Logger::DEBUG_LEVEL);
   }
-#endif
+//#endif
 
   Config::ConfigMap map = Config::configGet(CONFIG_FILE);
   Controller::CommandLineInterface interface;

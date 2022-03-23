@@ -10,6 +10,7 @@ namespace
   const uint16_t LOG_HEADER_LENGTH      (7);
   const std::vector<uint8_t> LOG_HEADER {'#', '#', 'l', 'o', 'g', '#', '#'};
   const char* ARDUINO_DOMAIN            ("Arduino Logger");
+  const char* LOGGER_DOMAIN             ("SocketSerialLogger");
 }
 
 //*****************************************************************************
@@ -82,6 +83,12 @@ uint32_t Network::SocketSerialLogger::read
   {
     data = *packet;
   }
+
+  for(uint8_t& next : data)
+  {
+    std::cout << (int)next << " ";
+  }
+  std::cout << std::endl;
 
   return data.size();
 }

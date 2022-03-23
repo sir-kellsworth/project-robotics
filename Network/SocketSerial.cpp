@@ -134,7 +134,11 @@ uint32_t Network::SocketSerial::read
       {
         data.resize(length);
       }
-      bytesRead = ::read(m_handle, data.data(), data.size());
+      bytesRead = 0;
+      while(bytesRead != length)
+      {
+          bytesRead += ::read(m_handle, data.data(), data.size());
+      }
 
       data.resize(bytesRead);
     }

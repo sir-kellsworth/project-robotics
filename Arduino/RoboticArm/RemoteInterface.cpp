@@ -64,6 +64,7 @@ void RemoteInterface::send
     = ActionMessage::ActionFactory::encoderGet(response);
   encoder->actionEncode(data);
 
+  //LOGGER_DEBUG("message length: %i", data.size());
   uint16_t length(data.size());
   Serial.write((uint8_t*)&length, 2);
   Serial.write(data.data(), data.size());
