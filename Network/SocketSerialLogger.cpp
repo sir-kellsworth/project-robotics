@@ -51,7 +51,7 @@ void Network::SocketSerialLogger::backgroundHandle()
   {
     std::vector<uint8_t> *data(new std::vector<uint8_t>());
     uint32_t size = m_socket.read(*data);
-    if(!serialDebugLog(*data))
+    if(size > 0 && !serialDebugLog(*data))
     {
       data->resize(size);
       std::lock_guard<std::mutex> lock(m_queueMutex);

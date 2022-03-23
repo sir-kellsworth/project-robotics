@@ -87,7 +87,8 @@ bool Network::SocketSerial::send
   const std::vector<uint8_t>& data
 )
 {
-  std::lock_guard<std::mutex> lock(m_mutex);
+  LOGGER_DEBUG(LOGGER_DOMAIN, "trying to write data");
+  std::lock_guard<std::mutex> lock(m_writeMutex);
   bool success(true);
 
   //arduino requires that end bytes are attached
@@ -103,6 +104,7 @@ bool Network::SocketSerial::send
     success = false;
     LOGGER_ERROR(LOGGER_DOMAIN, "failed to send data");
   }
+  LOGGER_DEBUG(LOGGER_DOMAIN, "wrote data");
 
   return success;
 }
@@ -114,8 +116,8 @@ uint32_t Network::SocketSerial::read
   std::vector<uint8_t>& data
 )
 {
-  std::lock_guard<std::mutex> lock(m_mutex);
-  uint32_t bytesRead;
+  std::lock_guard<std::mutex> lock(m_readMutex);
+  uint32_t bytesRead(0);
   fd_set socks;
 	struct timeval t;
 	FD_ZERO(&socks);
@@ -123,11 +125,25 @@ uint32_t Network::SocketSerial::read
 	t.tv_sec = 1;
   if(select(m_handle+1, &socks, NULL, NULL, &t))
   {
-    sleep(1);
-    bytesRead = ::read(m_handle, data.data(), data.size());
+    uint16_t length(0);
+    bytesRead = ::read(m_handle, &length, sizeof(length));
+    if(bytesRead == 2)
+    {
+      LOGGER_DEBUG(LOGGER_DOMAIN, "read length: %u", length);
+      if(data.size() < length)
+      {
+        data.resize(length);
+      }
+      bytesRead = ::read(m_handle, data.data(), data.size());
+
+      data.resize(bytesRead);
+    }
+    else
+    {
+      bytesRead = 0;
+    }
   }
-  data.erase(data.begin(), data.begin() + 2);
-  data.resize(bytesRead);
+  LOGGER_DEBUG(LOGGER_DOMAIN, "bytes read: %u", bytesRead);
 
   return bytesRead;
 }

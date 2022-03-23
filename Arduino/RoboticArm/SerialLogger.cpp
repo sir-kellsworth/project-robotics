@@ -28,7 +28,6 @@ SerialLogger::~SerialLogger()
 //*****************************************************************************
 void SerialLogger::log
 (
-  const char* domain,
   const char* format,
   ...
 )
@@ -39,7 +38,7 @@ void SerialLogger::log
   uint16_t messageLength = vsnprintf(message, MESSAGE_SIZE_MAX, format, args);
   uint16_t totalLength = LOG_HEADER_LENGTH + messageLength;
   Serial.write((uint8_t*)&totalLength, 2);
-  Serial.write(LOG_HEADER);
+  Serial.write(LOG_HEADER, LOG_HEADER_LENGTH);
   Serial.write(message, messageLength);
   Serial.flush();
   va_end(args);

@@ -1,6 +1,7 @@
-#include "RoboticArm.h"
-#include "RemoteInterface.h"
 #include "ActionMessage/ActionFactory/ActionFactory.h"
+#include "RemoteInterface.h"
+#include "RoboticArm.h"
+#include "SerialLogger.h"
 
 #include <Arduino.h>
 
@@ -37,6 +38,8 @@ RemoteInterface interface;
 void setup()
 {
   Serial.begin(115200);
+
+  LOGGER_DEBUG("arduino started");
 }
 
 
@@ -47,7 +50,9 @@ void loop()
 
   if(interface.actionGet(nextAction))
   {
+    LOGGER_DEBUG("got action");
     shared_ptr<ActionMessage::Action> response = arm.actionSendReply(nextAction);
+    LOGGER_DEBUG("got response");
 
     interface.send(response);
   }

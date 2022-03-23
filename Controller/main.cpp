@@ -44,6 +44,13 @@ int main
   char* argv[]
 )
 {
+#ifdef ARDUINO_DEBUG
+  {
+    Utils::Logger& logger = Utils::Logger::loggerGet();
+    logger.levelSet(Utils::Logger::DEBUG_LEVEL);
+  }
+#endif
+
   Config::ConfigMap map = Config::configGet(CONFIG_FILE);
   Controller::CommandLineInterface interface;
   std::unique_ptr<Network::Socket> socket;

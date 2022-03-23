@@ -27,7 +27,8 @@ public:
     std::vector<uint8_t>& data);
 private:
   int m_handle;
-  std::mutex m_mutex;
+  std::mutex m_readMutex;
+  std::mutex m_writeMutex;
 };
 
 }

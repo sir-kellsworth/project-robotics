@@ -1,5 +1,6 @@
 #include "RemoteInterface.h"
 
+#include "SerialLogger.h"
 #include "ActionMessage/ActionFactory/ActionFactory.h"
 #include "ActionMessage/MoveAction.h"
 
@@ -42,6 +43,7 @@ bool RemoteInterface::actionGet
   bool success(false);
   if(m_actionAvailable)
   {
+    LOGGER_DEBUG("got message");
     nextAction = m_nextAction;
     success = true;
     m_actionAvailable = false;
@@ -81,7 +83,7 @@ void RemoteInterface::step()
     m_bufferIndex = 0;
     m_state = LENGTH_GET_STATE;
   }
-  if(Serial.available() > 0)
+  else if(Serial.available() > 0)
   {
     if(m_state == LENGTH_GET_STATE)
     {
