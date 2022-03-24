@@ -25,6 +25,11 @@ public:
 
   virtual uint32_t read(
     std::vector<uint8_t>& data);
+
+  uint32_t readSub(
+    uint8_t* dataPtr,
+    uint16_t numBytes,
+    uint32_t timeoutMs);
 private:
   int m_handle;
   std::mutex m_readMutex;

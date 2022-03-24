@@ -20,7 +20,7 @@ namespace
     const Pathing::Point startPoint(0, 0, 30);
 };
 
-RoboticArm arm(
+/*RoboticArm arm(
   baseStepPin,
   baseDirPin,
   shoulderStepPin,
@@ -30,15 +30,15 @@ RoboticArm arm(
   armLength,
   forarmLength,
   homePoint,
-  startPoint);
+  startPoint);*/
 RemoteInterface interface;
 
 
 //*****************************************************************************
 void setup()
 {
+  delay(5000);
   Serial.begin(115200);
-
   LOGGER_DEBUG("arduino started");
 }
 
@@ -47,14 +47,15 @@ void setup()
 //*****************************************************************************
 void loop()
 {
-  shared_ptr<ActionMessage::Action> nextAction;
+  unique_ptr<ActionMessage::Action> nextAction;
 
   if(interface.actionGet(nextAction))
   {
-    //shared_ptr<ActionMessage::Action> response = arm.actionSendReply(nextAction);
+    //unique_ptr<ActionMessage::Action> response = arm.actionSendReply(nextAction);
 
-    shared_ptr<ActionMessage::Action> response(new ActionMessage::SuccessAction());
-    interface.send(response);
+    //unique_ptr<ActionMessage::Action> response(new ActionMessage::SuccessAction());
+    ActionMessage::SuccessAction response;
+    interface.send(&response);
   }
 
   interface.step();

@@ -112,6 +112,7 @@ void Controller::CommandLineInterface::commandParse
       std::shared_ptr<ActionMessage::Action> reply = m_device->actionSendReply(action);
       if(reply.get() != 0)
       {
+        LOGGER_DEBUG(LOGGER_DOMAIN, "Message type: %i", reply->messageTypeGet());
         if(reply->messageTypeGet() == ActionMessage::SuccessAction::TYPE_ID)
         {
           LOGGER_INFO(LOGGER_DOMAIN, "success");
