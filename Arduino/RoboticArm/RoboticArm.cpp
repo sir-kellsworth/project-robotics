@@ -70,15 +70,15 @@ shared_ptr<ActionMessage::Action> RoboticArm::actionSendReply
 
 
 //*****************************************************************************
-unique_ptr<ActionMessage::Action> RoboticArm::actionSendReply
+void RoboticArm::actionSendReply
 (
-  unique_ptr<ActionMessage::Action> action
+  const unique_ptr<ActionMessage::Action>& action,
+  unique_ptr<ActionMessage::Action>& response
 )
 {
-  unique_ptr<ActionMessage::Action> response(new ActionMessage::FailedAction());
 
-  response = unique_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
-  return response;
+  response = new ActionMessage::SuccessAction();
+  return;
 
   if(action.get() != 0)
   {
@@ -97,23 +97,21 @@ unique_ptr<ActionMessage::Action> RoboticArm::actionSendReply
     {
       powerDown();
 
-      response = unique_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
+      response = new ActionMessage::SuccessAction();
     }
     else if(action->messageTypeGet() == ActionMessage::PowerUpAction::TYPE_ID)
     {
       powerUp();
 
-      response = unique_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
+      response = new ActionMessage::SuccessAction();
     }
     else if(action->messageTypeGet() == ActionMessage::KillAction::TYPE_ID)
     {
       powerDown();
 
-      response = unique_ptr<ActionMessage::Action>(new ActionMessage::FailedAction());
+      response = new ActionMessage::FailedAction();
     }
   }
-
-  return response;
 }
 
 
@@ -202,11 +200,11 @@ unique_ptr<ActionMessage::Action> RoboticArm::moveTo
     m_shoulderMotor.moveTo(shoulderPosition);
     m_elbowMotor.moveTo(elbowPosition);
 
-    response = unique_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
+    response = new ActionMessage::SuccessAction();
   }
   else
   {
-    response = unique_ptr<ActionMessage::Action>(new ActionMessage::FailedAction());
+    response = new ActionMessage::FailedAction();
   }
 
 

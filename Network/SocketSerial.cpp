@@ -134,6 +134,13 @@ uint32_t Network::SocketSerial::read
       bytesRead += numBytes;
       ++numTrys;
     }
+
+    data.resize(bytesRead);
+    for(uint8_t& next : data)
+    {
+      std::cout << (int)next << " ";
+    }
+    std::cout << std::endl;
   }
 
   return bytesRead;

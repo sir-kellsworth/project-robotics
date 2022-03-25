@@ -29,8 +29,9 @@ public:
   virtual shared_ptr<ActionMessage::Action> actionSendReply(
     shared_ptr<ActionMessage::Action> action);
 
-  unique_ptr<ActionMessage::Action> actionSendReply(
-    unique_ptr<ActionMessage::Action> action);
+  void actionSendReply(
+    const unique_ptr<ActionMessage::Action>& action,
+    unique_ptr<ActionMessage::Action>& reply);
 
   void step();
 

@@ -43,7 +43,7 @@ bool RemoteInterface::actionGet
   if(m_actionAvailable)
   {
     LOGGER_DEBUG("making new action");
-    nextAction = unique_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());//m_nextAction;
+    nextAction = m_nextAction.release();
     success = true;
     m_actionAvailable = false;
   }
@@ -75,11 +75,10 @@ void RemoteInterface::step()
 {
   if(m_state == MESSAGE_PROCESS_STATE)
   {
-    //m_nextAction =
-    //  new ActionMessage::SuccessAction();
-      //ActionMessage::ActionFactory::messageGenerate(m_buffer);
+    m_nextAction =
+      ActionMessage::ActionFactory::messageGenerate(m_buffer);
     m_actionAvailable = true;
-    //memset(m_buffer.data(), 0, m_bufferIndex);
+    memset(m_buffer.data(), 0, m_bufferIndex);
     m_bufferIndex = 0;
     m_state = LENGTH_GET_STATE;
   }

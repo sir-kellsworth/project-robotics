@@ -27,19 +27,21 @@ public:
 
   }
 
+
   unique_ptr
   (
-    unique_ptr& s
+    unique_ptr&& s
   )
   :pt(s.release())
   {
 
   }
 
+
   template<class U>
   unique_ptr
   (
-    unique_ptr<U>& s
+    unique_ptr<U>&& s
   )
   :pt(s.release())
   {
@@ -56,7 +58,7 @@ public:
 
   unique_ptr& operator=
   (
-    unique_ptr& s
+    unique_ptr&& s
   )
   {
       if(get() != s.get())
@@ -66,18 +68,34 @@ public:
       return *this;
   }
 
+
   template<class U>
   unique_ptr& operator=
   (
-    const unique_ptr<U>& s
+    unique_ptr<U>&& s
   )
   {
-    if(get() != s.get())
+      if(get() != s.get())
+      {
+          pt = s.release();
+      }
+      return *this;
+  }
+
+
+  template<class U>
+  unique_ptr& operator=
+  (
+    U* s
+  )
+  {
+    if(get() != s)
     {
-        pt = s.release();
+        pt = s;
     }
     return *this;
   }
+
 
   T* operator->() const
   {

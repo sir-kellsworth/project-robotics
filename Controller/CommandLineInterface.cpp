@@ -15,7 +15,7 @@
 
 namespace
 {
-  const char* LOGGER_DOMAIN       ("Main");
+  const char* LOGGER_DOMAIN       ("CommandLineInterface");
 
   const char* COMMAND_HOME        ("home");
   const char* COMMAND_MOVE_TO     ("moveTo");

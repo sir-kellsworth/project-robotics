@@ -20,7 +20,7 @@ namespace
     const Pathing::Point startPoint(0, 0, 30);
 };
 
-/*RoboticArm arm(
+RoboticArm arm(
   baseStepPin,
   baseDirPin,
   shoulderStepPin,
@@ -30,7 +30,7 @@ namespace
   armLength,
   forarmLength,
   homePoint,
-  startPoint);*/
+  startPoint);
 RemoteInterface interface;
 
 
@@ -43,7 +43,6 @@ void setup()
 }
 
 
-#include "ActionMessage/SuccessAction.h"
 //*****************************************************************************
 void loop()
 {
@@ -51,11 +50,10 @@ void loop()
 
   if(interface.actionGet(nextAction))
   {
-    //unique_ptr<ActionMessage::Action> response = arm.actionSendReply(nextAction);
+    unique_ptr<ActionMessage::Action> response;
+    arm.actionSendReply(nextAction, response);
 
-    //unique_ptr<ActionMessage::Action> response(new ActionMessage::SuccessAction());
-    ActionMessage::SuccessAction response;
-    interface.send(&response);
+    interface.send(response);
   }
 
   interface.step();
