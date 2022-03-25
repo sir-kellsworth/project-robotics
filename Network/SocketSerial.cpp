@@ -12,7 +12,7 @@
 
 namespace
 {
-  const char* LOGGER_DOMAIN ("SocketTcp");
+  const char* LOGGER_DOMAIN ("SocketSerial");
 
   const uint8_t LENGTH_NUM_BYTES(2);
 };

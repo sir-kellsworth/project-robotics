@@ -38,7 +38,8 @@ unique_ptr<ActionMessage::Action> ActionMessage::ActionFactory::messageGenerate
   vector<uint8_t> data
 )
 {
-  unique_ptr<ActionMessage::Action> generatedAction;
+  unique_ptr<ActionMessage::Action> generatedAction(new ActionMessage::SuccessAction());
+  return generatedAction;
 
   if(data[TYPE_ID_POSITION] == ActionMessage::FailedAction::TYPE_ID)
   {

@@ -32,7 +32,6 @@ RemoteInterface::~RemoteInterface()
 }
 
 
-#include "ActionMessage/SuccessAction.h"
 //*****************************************************************
 bool RemoteInterface::actionGet
 (
@@ -70,13 +69,15 @@ void RemoteInterface::send
 }
 
 
+#include "ActionMessage/SuccessAction.h"
 //*****************************************************************
 void RemoteInterface::step()
 {
   if(m_state == MESSAGE_PROCESS_STATE)
   {
     m_nextAction =
-      ActionMessage::ActionFactory::messageGenerate(m_buffer);
+      new ActionMessage::SuccessAction();
+      //ActionMessage::ActionFactory::messageGenerate(m_buffer);
     m_actionAvailable = true;
     memset(m_buffer.data(), 0, m_bufferIndex);
     m_bufferIndex = 0;
