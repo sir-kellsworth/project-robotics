@@ -32,6 +32,7 @@ RemoteInterface::~RemoteInterface()
 }
 
 
+#include "ActionMessage/SuccessAction.h"
 //*****************************************************************
 bool RemoteInterface::actionGet
 (
@@ -41,10 +42,14 @@ bool RemoteInterface::actionGet
   bool success(false);
   if(m_actionAvailable)
   {
-    LOGGER_DEBUG("making new action");
-    nextAction = m_nextAction.release();
+    m_buffer.resize(m_bufferIndex);
+    nextAction = ActionMessage::ActionFactory::messageGenerate(m_buffer);
+    LOGGER_DEBUG("action ptr: %i", nextAction.get());
     success = true;
     m_actionAvailable = false;
+    m_bufferIndex = 0;
+    memset(m_buffer.data(), 0, m_bufferIndex);
+    m_buffer.resize(BUFFER_MAX_SIZE);
   }
 
   return success;
@@ -62,25 +67,18 @@ void RemoteInterface::send
     = ActionMessage::ActionFactory::encoderGet(response);
   encoder->actionEncode(data);
 
-  //LOGGER_DEBUG("message length: %i", data.size());
   uint16_t length(data.size());
   Serial.write((uint8_t*)&length, 2);
   Serial.write(data.data(), length);
 }
 
 
-#include "ActionMessage/SuccessAction.h"
 //*****************************************************************
 void RemoteInterface::step()
 {
   if(m_state == MESSAGE_PROCESS_STATE)
   {
-    m_nextAction =
-      new ActionMessage::SuccessAction();
-      //ActionMessage::ActionFactory::messageGenerate(m_buffer);
     m_actionAvailable = true;
-    memset(m_buffer.data(), 0, m_bufferIndex);
-    m_bufferIndex = 0;
     m_state = LENGTH_GET_STATE;
   }
   else if(Serial.available() > 0)

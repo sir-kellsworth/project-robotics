@@ -37,7 +37,6 @@ private:
   SERIAL_STATE m_state;
   uint16_t m_messageLength;
   vector<uint8_t> m_buffer;
-  unique_ptr<ActionMessage::Action> m_nextAction;
   bool m_actionAvailable;
   uint8_t m_bufferIndex;
 };

@@ -76,10 +76,6 @@ void RoboticArm::actionSendReply
   unique_ptr<ActionMessage::Action>& response
 )
 {
-
-  response = new ActionMessage::SuccessAction();
-  return;
-
   if(action.get() != 0)
   {
     LOGGER_DEBUG("message type: %i", action->messageTypeGet());

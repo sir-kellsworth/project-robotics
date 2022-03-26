@@ -57,5 +57,5 @@ void loop()
   }
 
   interface.step();
-  //arm.step();
+  arm.step();
 }
