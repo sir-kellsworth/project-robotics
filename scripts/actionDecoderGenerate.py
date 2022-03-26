@@ -18,7 +18,7 @@ indexParamsTemplate = "${INDEX_PARAMS}"
 def paramsIndexSourceGenerate(params, namespace):
     paramsIndex = ""
     if len(params) > 0:
-        startIndex = 2
+        startIndex = 1
         index = 0
         for param in params:
             nextIndex = "\tconst uint16_t INDEX_PARAM_" + str(index) \
@@ -27,7 +27,7 @@ def paramsIndexSourceGenerate(params, namespace):
                 nextIndex = nextIndex + str(startIndex)
             else:
                 nextIndex = nextIndex + "INDEX_PARAM_" + str(index-1) + " + "
-                nextIndex = nextIndex + namespace + "::SIZE_PARAM_" + str(index)
+                nextIndex = nextIndex + namespace + "::SIZE_PARAM_" + str(index-1)
 
             nextIndex = nextIndex + ");\n"
             paramsIndex = paramsIndex + nextIndex

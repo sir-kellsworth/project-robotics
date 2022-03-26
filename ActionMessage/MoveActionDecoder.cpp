@@ -3,9 +3,9 @@
 
 namespace
 {
-	const uint16_t INDEX_PARAM_0(2);
-	const uint16_t INDEX_PARAM_1(INDEX_PARAM_0 + ActionMessage::MoveAction::SIZE_PARAM_1);
-	const uint16_t INDEX_PARAM_2(INDEX_PARAM_1 + ActionMessage::MoveAction::SIZE_PARAM_2);
+	const uint16_t INDEX_PARAM_0(1);
+	const uint16_t INDEX_PARAM_1(INDEX_PARAM_0 + ActionMessage::MoveAction::SIZE_PARAM_0);
+	const uint16_t INDEX_PARAM_2(INDEX_PARAM_1 + ActionMessage::MoveAction::SIZE_PARAM_1);
 
 }
 

@@ -29,6 +29,10 @@ public:
   virtual shared_ptr<ActionMessage::Action> actionSendReply(
     shared_ptr<ActionMessage::Action> action);
 
+  void actionSendReply(
+    const unique_ptr<ActionMessage::Action>& action,
+    unique_ptr<ActionMessage::Action>& reply);
+
   void step();
 
   void powerDown();
@@ -40,13 +44,10 @@ private:
     float shoulderAngle,
     float elbowAngle);
 
-  //void messageSend(
-  //  const unique_ptr<ActionMessage::Action>& response);
-
-  shared_ptr<ActionMessage::Action> moveHandle(
+  unique_ptr<ActionMessage::Action> moveHandle(
     ActionMessage::MoveAction* moveAction);
 
-  shared_ptr<ActionMessage::Action> moveTo(
+  unique_ptr<ActionMessage::Action> moveTo(
     Pathing::Point goal);
 
   AccelStepper m_baseMotor;

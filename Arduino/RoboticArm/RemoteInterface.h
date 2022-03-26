@@ -19,10 +19,10 @@ public:
   ~RemoteInterface();
 
   bool actionGet(
-    shared_ptr<ActionMessage::Action>& nextAction);
+    unique_ptr<ActionMessage::Action>& nextAction);
 
   void send(
-    const shared_ptr<ActionMessage::Action>& response);
+    const unique_ptr<ActionMessage::Action>& response);
 
   void step();
 
@@ -37,7 +37,6 @@ private:
   SERIAL_STATE m_state;
   uint16_t m_messageLength;
   vector<uint8_t> m_buffer;
-  shared_ptr<ActionMessage::Action> m_nextAction;
   bool m_actionAvailable;
   uint8_t m_bufferIndex;
 };

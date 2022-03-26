@@ -1,5 +1,6 @@
 #include "RoboticArm.h"
 
+#include "SerialLogger.h"
 #include "ActionMessage/ActionFactory/ActionFactory.h"
 #include "ActionMessage/ActionEncoder.h"
 #include "ActionMessage/HomeAction.h"
@@ -64,15 +65,23 @@ shared_ptr<ActionMessage::Action> RoboticArm::actionSendReply
   shared_ptr<ActionMessage::Action> action
 )
 {
-  shared_ptr<ActionMessage::Action> response(new ActionMessage::FailedAction());
 
+}
+
+
+//*****************************************************************************
+void RoboticArm::actionSendReply
+(
+  const unique_ptr<ActionMessage::Action>& action,
+  unique_ptr<ActionMessage::Action>& response
+)
+{
   if(action.get() != 0)
   {
+    LOGGER_DEBUG("message type: %i", action->messageTypeGet());
     if(action->messageTypeGet() == ActionMessage::MoveAction::TYPE_ID)
     {
-      ActionMessage::MoveAction* move = (ActionMessage::MoveAction*)action.get();
-
-      response = moveHandle(move);
+      response = moveHandle((ActionMessage::MoveAction*)action.get());
     }
     else if(action->messageTypeGet() == ActionMessage::HomeAction::TYPE_ID)
     {
@@ -84,23 +93,21 @@ shared_ptr<ActionMessage::Action> RoboticArm::actionSendReply
     {
       powerDown();
 
-      response.reset(new ActionMessage::SuccessAction());
+      response = new ActionMessage::SuccessAction();
     }
     else if(action->messageTypeGet() == ActionMessage::PowerUpAction::TYPE_ID)
     {
       powerUp();
 
-      response.reset(new ActionMessage::SuccessAction());
+      response = new ActionMessage::SuccessAction();
     }
     else if(action->messageTypeGet() == ActionMessage::KillAction::TYPE_ID)
     {
       powerDown();
 
-      response.reset(new ActionMessage::FailedAction());
+      response = new ActionMessage::FailedAction();
     }
   }
-
-  return response;
 }
 
 
@@ -119,7 +126,7 @@ bool RoboticArm::anglesValidate
 
 
 //*****************************************************************
-shared_ptr<ActionMessage::Action> RoboticArm::moveHandle
+unique_ptr<ActionMessage::Action> RoboticArm::moveHandle
 (
   ActionMessage::MoveAction* moveAction
 )
@@ -147,12 +154,12 @@ shared_ptr<ActionMessage::Action> RoboticArm::moveHandle
 
 
 //*****************************************************************
-shared_ptr<ActionMessage::Action> RoboticArm::moveTo
+unique_ptr<ActionMessage::Action> RoboticArm::moveTo
 (
   Pathing::Point goal
 )
 {
-  shared_ptr<ActionMessage::Action> response;
+  unique_ptr<ActionMessage::Action> response;
   float baseAngle(0);
   float shoulderAngle(0);
   float elbowAngle(0);
@@ -189,12 +196,13 @@ shared_ptr<ActionMessage::Action> RoboticArm::moveTo
     m_shoulderMotor.moveTo(shoulderPosition);
     m_elbowMotor.moveTo(elbowPosition);
 
-    response = shared_ptr<ActionMessage::Action>(new ActionMessage::SuccessAction());
+    response = new ActionMessage::SuccessAction();
   }
   else
   {
-    response = shared_ptr<ActionMessage::Action>(new ActionMessage::FailedAction());
+    response = new ActionMessage::FailedAction();
   }
+
 
   return response;
 }

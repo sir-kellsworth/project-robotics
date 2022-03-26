@@ -35,8 +35,8 @@ public:
     uint32_t size
   )
   :capacity_(size),
-   count_(0), //count_(size),
-   data_(new T[count_])
+   count_(0),
+   data_(new T[capacity_])
   {
 
   }

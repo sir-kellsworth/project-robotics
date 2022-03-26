@@ -9,9 +9,7 @@
 
 namespace
 {
-  const uint8_t BUFFER_MAX_SIZE(500);
-  const uint8_t NUM_END_BYTES(3);
-  const uint8_t MESSAGE_END[NUM_END_BYTES] = {0x44, 0x44, 0x44};
+  const uint8_t BUFFER_MAX_SIZE(100);
 }
 
 
@@ -34,19 +32,24 @@ RemoteInterface::~RemoteInterface()
 }
 
 
+#include "ActionMessage/SuccessAction.h"
 //*****************************************************************
 bool RemoteInterface::actionGet
 (
-  shared_ptr<ActionMessage::Action>& nextAction
+  unique_ptr<ActionMessage::Action>& nextAction
 )
 {
   bool success(false);
   if(m_actionAvailable)
   {
-    LOGGER_DEBUG("got message");
-    nextAction = m_nextAction;
+    m_buffer.resize(m_bufferIndex);
+    nextAction = ActionMessage::ActionFactory::messageGenerate(m_buffer);
+    LOGGER_DEBUG("action ptr: %i", nextAction.get());
     success = true;
     m_actionAvailable = false;
+    m_bufferIndex = 0;
+    memset(m_buffer.data(), 0, m_bufferIndex);
+    m_buffer.resize(BUFFER_MAX_SIZE);
   }
 
   return success;
@@ -56,7 +59,7 @@ bool RemoteInterface::actionGet
 //*****************************************************************
 void RemoteInterface::send
 (
-  const shared_ptr<ActionMessage::Action>& response
+  const unique_ptr<ActionMessage::Action>& response
 )
 {
   vector<uint8_t> data;
@@ -64,11 +67,9 @@ void RemoteInterface::send
     = ActionMessage::ActionFactory::encoderGet(response);
   encoder->actionEncode(data);
 
-  //LOGGER_DEBUG("message length: %i", data.size());
   uint16_t length(data.size());
   Serial.write((uint8_t*)&length, 2);
-  Serial.write(data.data(), data.size());
-  Serial.flush();
+  Serial.write(data.data(), length);
 }
 
 
@@ -77,11 +78,7 @@ void RemoteInterface::step()
 {
   if(m_state == MESSAGE_PROCESS_STATE)
   {
-    m_nextAction.reset(
-      ActionMessage::ActionFactory::messageGenerate(m_buffer).release());
     m_actionAvailable = true;
-    memset(m_buffer.data(), 0, m_bufferIndex);
-    m_bufferIndex = 0;
     m_state = LENGTH_GET_STATE;
   }
   else if(Serial.available() > 0)

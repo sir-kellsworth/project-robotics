@@ -12,7 +12,7 @@
 
 namespace
 {
-  const char* LOGGER_DOMAIN ("SocketTcp");
+  const char* LOGGER_DOMAIN ("SocketSerial");
 
   const uint8_t LENGTH_NUM_BYTES(2);
 };
@@ -118,36 +118,54 @@ uint32_t Network::SocketSerial::read
 {
   std::lock_guard<std::mutex> lock(m_readMutex);
   uint32_t bytesRead(0);
+  uint16_t length(0);
+  if(readSub((uint8_t*)&length, 2, 200))
+  {
+    if(data.size() < length)
+    {
+      data.resize(length);
+    }
+    uint8_t* dataPtr = data.data();
+    uint8_t numTrys(0);
+    while(numTrys < 10)
+    {
+      uint32_t numBytes = readSub(dataPtr, length - bytesRead, 200);
+      dataPtr += numBytes;
+      bytesRead += numBytes;
+      ++numTrys;
+    }
+
+    data.resize(bytesRead);
+    for(uint8_t& next : data)
+    {
+      std::cout << (int)next << " ";
+    }
+    std::cout << std::endl;
+  }
+
+  return bytesRead;
+}
+
+
+//*****************************************************************************
+uint32_t Network::SocketSerial::readSub
+(
+  uint8_t* dataPtr,
+  uint16_t numBytes,
+  uint32_t timeoutMs
+)
+{
+  uint32_t bytesRead(0);
   fd_set socks;
 	struct timeval t;
 	FD_ZERO(&socks);
 	FD_SET(m_handle, &socks);
-	t.tv_sec = 1;
+	t.tv_sec = timeoutMs / 1000;
+  t.tv_usec = (timeoutMs % 1000) * 100;
   if(select(m_handle+1, &socks, NULL, NULL, &t))
   {
-    uint16_t length(0);
-    bytesRead = ::read(m_handle, &length, sizeof(length));
-    if(bytesRead == 2)
-    {
-      LOGGER_DEBUG(LOGGER_DOMAIN, "read length: %u", length);
-      if(data.size() < length)
-      {
-        data.resize(length);
-      }
-      bytesRead = 0;
-      while(bytesRead != length)
-      {
-          bytesRead += ::read(m_handle, data.data(), data.size());
-      }
-
-      data.resize(bytesRead);
-    }
-    else
-    {
-      bytesRead = 0;
-    }
+    bytesRead = ::read(m_handle, dataPtr, numBytes);
   }
-  LOGGER_DEBUG(LOGGER_DOMAIN, "bytes read: %u", bytesRead);
 
   return bytesRead;
 }

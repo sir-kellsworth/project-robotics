@@ -11,15 +11,42 @@ template<class T>
 class unique_ptr
 {
 public:
-  unique_ptr() :pt(0) {}
+  unique_ptr()
+   :pt(0)
+   {
+
+   }
 
   template<class U>
-  unique_ptr(U* pu) :pt(pu) {}
+  unique_ptr
+  (
+    U* pu
+  )
+  :pt(pu)
+  {
 
-  unique_ptr(const unique_ptr& s) :pt(s.pt) { s.pt = 0; }
+  }
+
+
+  unique_ptr
+  (
+    unique_ptr&& s
+  )
+  :pt(s.release())
+  {
+
+  }
+
 
   template<class U>
-  unique_ptr(unique_ptr<U>& s) :pt(s.pt) { s.pt = 0; }
+  unique_ptr
+  (
+    unique_ptr<U>&& s
+  )
+  :pt(s.release())
+  {
+
+  }
 
   ~unique_ptr()
   {
@@ -31,35 +58,69 @@ public:
 
   unique_ptr& operator=
   (
-    const unique_ptr& s
+    unique_ptr&& s
   )
   {
-      if(this!=&s)
+      if(get() != s.get())
       {
-          pt=s.pt;
-          s.release();
+          pt = s.release();
       }
       return *this;
   }
 
+
   template<class U>
   unique_ptr& operator=
   (
-    const unique_ptr<U>& s
+    unique_ptr<U>&& s
   )
   {
-    if(get()!=s.get())
+      if(get() != s.get())
+      {
+          pt = s.release();
+      }
+      return *this;
+  }
+
+
+  template<class U>
+  unique_ptr& operator=
+  (
+    U* s
+  )
+  {
+    if(get() != s)
     {
-        pt=s.get();
-        s.release();
+        pt = s;
     }
     return *this;
   }
 
-  T* operator->() const { return pt; }
-  T* get() const { return pt; }
-  T& operator*() const { return *pt; }
-  T* release() { T* tmp = pt; pt = 0; return tmp; }
+
+  T* operator->() const
+  {
+    return pt;
+  }
+
+
+  T* get() const
+  {
+    return pt;
+  }
+
+
+  T& operator*() const
+  {
+    return *pt;
+  }
+
+
+  T* release()
+  {
+    T* tmp = pt;
+    pt = 0;
+    return tmp;
+  }
 
 private:
   T* pt;

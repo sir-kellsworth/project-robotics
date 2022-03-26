@@ -40,7 +40,6 @@ void SerialLogger::log
   Serial.write((uint8_t*)&totalLength, 2);
   Serial.write(LOG_HEADER, LOG_HEADER_LENGTH);
   Serial.write(message, messageLength);
-  Serial.flush();
   va_end(args);
 }
 
