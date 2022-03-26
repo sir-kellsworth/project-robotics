@@ -1,6 +1,8 @@
 #ifndef PATHING_POINT_H
 #define PATHING_POINT_H
 
+#include <stdint.h>
+
 namespace Pathing
 {
 
@@ -10,9 +12,9 @@ public:
   Point();
 
   Point(
-    float x,
-    float y,
-    float z);
+    uint16_t x,
+    uint16_t y,
+    uint16_t z);
 
   ~Point();
 
@@ -20,25 +22,25 @@ public:
 
   bool valid();
 
-  const float& xGet() const;
+  const uint16_t& xGet() const;
 
   void xSet(
-    float x);
+    uint16_t x);
 
-  const float& yGet() const;
+  const uint16_t& yGet() const;
 
   void ySet(
-    float y);
+    uint16_t y);
 
-  const float& zGet() const;
+  const uint16_t& zGet() const;
 
   void zSet(
-    float z);
+    uint16_t z);
 
 private:
-  float m_x;
-  float m_y;
-  float m_z;
+  uint16_t m_x;
+  uint16_t m_y;
+  uint16_t m_z;
 };
 
 }

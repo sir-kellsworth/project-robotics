@@ -39,7 +39,13 @@ RoboticArm::RoboticArm
  m_armLength(armLength),
  m_forarmLength(forarmLength),
  m_home(homePoint),
- m_currentPosition(startPoint)
+ m_currentPosition(startPoint),
+ m_baseAngleMin(0),
+ m_baseAngleMax(360),
+ m_shoulderAngleMin(0),
+ m_shoulderAngleMax(360),
+ m_elbowAngleMin(0),
+ m_elbowAngleMax(360)
 {
   m_baseMotor.setMaxSpeed(STEPPER_SPEED_MAX);
   m_shoulderMotor.setMaxSpeed(STEPPER_SPEED_MAX);
@@ -135,6 +141,7 @@ unique_ptr<ActionMessage::Action> RoboticArm::moveHandle
     moveAction->xGet(),
     moveAction->yGet(),
     moveAction->zGet());
+  LOGGER_DEBUG("goal: %i,%i,%i", goal.xGet(), goal.yGet(), goal.zGet());
 
   if(goal.xGet() == Utils::NO_MOVEMENT)
   {
@@ -172,10 +179,12 @@ unique_ptr<ActionMessage::Action> RoboticArm::moveTo
     baseAngle,
     shoulderAngle,
     elbowAngle);
+    LOGGER_DEBUG("baseAngle: %f, shoulderAngle: %f, elbowAngle: %f", baseAngle, shoulderAngle, elbowAngle);
 
   //if any of these are invalid, then the angle is outside of the
   //physical bounds of the arm. Set in the config file
   bool validAngle = anglesValidate(baseAngle, shoulderAngle, elbowAngle);
+  LOGGER_DEBUG("angle valid: %f", validAngle);
 
   if(validAngle)
   {

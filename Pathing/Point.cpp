@@ -10,9 +10,9 @@ Pathing::Point::Point()
 //*****************************************************************************
 Pathing::Point::Point
 (
-  float x,
-  float y,
-  float z
+  uint16_t x,
+  uint16_t y,
+  uint16_t z
 )
 :m_x(x),
  m_y(y),
@@ -49,7 +49,7 @@ bool Pathing::Point::valid()
 
 
 //*****************************************************************************
-const float& Pathing::Point::xGet() const
+const uint16_t& Pathing::Point::xGet() const
 {
   return m_x;
 }
@@ -58,7 +58,7 @@ const float& Pathing::Point::xGet() const
 //*****************************************************************************
 void Pathing::Point::xSet
 (
-  float x
+  uint16_t x
 )
 {
   m_x = x;
@@ -66,7 +66,7 @@ void Pathing::Point::xSet
 
 
 //*****************************************************************************
-const float& Pathing::Point::yGet() const
+const uint16_t& Pathing::Point::yGet() const
 {
   return m_y;
 }
@@ -75,7 +75,7 @@ const float& Pathing::Point::yGet() const
 //*****************************************************************************
 void Pathing::Point::ySet
 (
-  float y
+  uint16_t y
 )
 {
   m_y = y;
@@ -83,7 +83,7 @@ void Pathing::Point::ySet
 
 
 //*****************************************************************************
-const float& Pathing::Point::zGet() const
+const uint16_t& Pathing::Point::zGet() const
 {
   return m_z;
 }
@@ -92,7 +92,7 @@ const float& Pathing::Point::zGet() const
 //*****************************************************************************
 void Pathing::Point::zSet
 (
-  float z
+  uint16_t z
 )
 {
   m_z = z;

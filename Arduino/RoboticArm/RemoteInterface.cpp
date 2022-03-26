@@ -32,7 +32,6 @@ RemoteInterface::~RemoteInterface()
 }
 
 
-#include "ActionMessage/SuccessAction.h"
 //*****************************************************************
 bool RemoteInterface::actionGet
 (
